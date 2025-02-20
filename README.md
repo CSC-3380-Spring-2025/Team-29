@@ -1,10 +1,10 @@
 # [Name of the Project] : [Team Number]
 # Members
 Project Manager: [Jaylen Haney] ([Summrrino])\
-Communications Lead: [Name] ([GitHub Name])\
-Git Master: [Name] ([GitHub Name])\
-Design Lead: [Name] ([GitHub Name])\
-Quality Assurance Tester: [Name] ([GitHub Name])
+Communications Lead: [Thomas Lee] ([luffysolosyonko])\
+Git Master: [Rivers Dupaquier] ([RiversDupaquie])\
+Design Lead: [Tyler Jackson] ([tylerjackson177])\
+Quality Assurance Tester: [Julian Rodgers] ([jrodg32])
 
 # About Our Software
 
