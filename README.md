@@ -1,4 +1,4 @@
-# [Name of the Project] : [Team Number]
+# [Name of the Project] : [Team Number 29]
 # Members
 Project Manager: [Jaylen Haney] ([Summrrino])\
 Communications Lead: [Thomas Lee] ([luffysolosyonko])\
