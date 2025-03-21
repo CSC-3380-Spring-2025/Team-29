@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; // Import Link
+import { BrowserRouter as Router, Routes, Route, Link, useParams } from "react-router-dom";
 import './App.css';
 
 function Leaderboard({ leaderboard, handleVote }) {
+  const { category } = useParams(); // Get the category from the URL
+  const filteredLeaderboard = leaderboard.filter(poet => poet.category === category);
+
   return (
     <div className="main-content">
-      <h1> Tournament Leaderboard </h1>
-      <p> Vote for your favorite poets in the tournament!</p>
+      <h1> {category.charAt(0).toUpperCase() + category.slice(1)} Leaderboard </h1>
+      <p> Vote for your favorite poets in the {category} category!</p>
       <div className="leaderboard">
         <table>
           <thead>
@@ -18,7 +21,7 @@ function Leaderboard({ leaderboard, handleVote }) {
             </tr>
           </thead>
           <tbody>
-            {leaderboard.map((poet, index) => (
+            {filteredLeaderboard.map((poet, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{poet.name}</td>
@@ -47,10 +50,10 @@ function Submission() {
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [leaderboard, setLeaderboard] = useState([
-    { name: "Poet A", votes: 120 },
-    { name: "Poet B", votes: 95 },
-    { name: "Poet C", votes: 80 },
-    { name: "Poet D", votes: 60 },
+    { name: "Poet A", votes: 120, category: "love" },
+    { name: "Poet B", votes: 95, category: "hope" },
+    { name: "Poet C", votes: 80, category: "love" },
+    { name: "Poet D", votes: 60, category: "hope" },
   ]);
 
   const handleSearchChange = (event) => {
@@ -76,7 +79,7 @@ function App() {
           <div className="navbar-logo">
             <span> Poetry Garden </span>
           </div>
-          <ul className="navbar-links"> {/* Fixed closing tag */}
+          <ul className="navbar-links">
             <li><Link to="/">Home</Link></li>
             <li><Link to="/my-garden">My Garden</Link></li>
             <li><Link to="/community-garden">Community Garden</Link></li>
@@ -84,7 +87,13 @@ function App() {
             <li className="dropdown">
               <span className="dropdown-toggle">Tournament</span>
               <ul className="dropdown-menu">
-                <li><Link to="/tournament/leaderboard">Leaderboard</Link></li>
+                <li className="dropdown">
+                  <Link to="#" className="dropdown-toggle">Leaderboard</Link>
+                  <ul className="dropdown-menu">
+                    <li><Link to="/tournament/leaderboard/love">Love Poems</Link></li>
+                    <li><Link to="/tournament/leaderboard/hope">Hope Poems</Link></li>
+                  </ul>
+                </li>
                 <li><Link to="/tournament/submission">Submission</Link></li>
               </ul>
             </li>
@@ -101,7 +110,7 @@ function App() {
         </nav>
         <Routes>
           <Route
-            path="/tournament/leaderboard"
+            path="/tournament/leaderboard/:category"
             element={<Leaderboard leaderboard={leaderboard} handleVote={handleVote} />}
           />
           <Route path="/tournament/submission" element={<Submission />} />

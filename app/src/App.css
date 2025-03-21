@@ -129,8 +129,27 @@ body {
   min-width: 150px; /* Ensure the dropdown has a minimum width */
 }
 
+.navbar .dropdown:hover > .dropdown-menu {
+  display: block; /* Show the dropdown menu on hover */
+}
+
 .navbar .dropdown-menu li {
+  position: relative; /* Ensure nested dropdowns are positioned correctly */
   padding: 10px 20px;
+}
+
+.navbar .dropdown-menu li .dropdown-menu {
+  display: none; /* Hide nested dropdowns initially */
+  position: absolute;
+  top: 0;
+  left: 100%; /* Position nested dropdowns to the right */
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.navbar .dropdown-menu li:hover > .dropdown-menu {
+  display: block; /* Show nested dropdowns on hover */
 }
 
 .navbar .dropdown-menu li a {
@@ -143,19 +162,69 @@ body {
   background-color: #f0f0f0; /* Add a hover effect for dropdown items */
 }
 
-.navbar .dropdown:hover .dropdown-menu {
-  display: block; /* Show the dropdown menu on hover */
+.navbar .dropdown-menu li .dropdown-toggle {
+  display: block; /* Ensure the text is visible */
+  padding: 10px 20px;
+  color: black; /* Set text color */
+  text-decoration: none;
+  font-weight: bold; /* Make it stand out */
+}
+
+.navbar .dropdown-menu li .dropdown-toggle:hover {
+  background-color: #f0f0f0; /* Add hover effect */
+  color: #333; /* Darker text on hover */
 }
 
 /* Main Content Styles */
 .main-content {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Horizontally center all elements */
+  justify-content: flex-start; /* Align elements to the top */
+  height: 100vh; /* Full viewport height */
   padding: 20px;
+  box-sizing: border-box; /* Include padding in height calculation */
 }
 
-.main-content h1 {
-  color: #2E8B57; /* Dark green */
-}
-
+/* Highlighted parts (h1 and p) */
+.main-content h1,
 .main-content p {
-  color: #333;
+  margin: 0; /* Remove default margins */
+  padding: 10px 0; /* Add spacing between elements */
+  text-align: center; /* Center-align text */
+}
+
+/* Add spacing between the highlighted parts and the leaderboard */
+.main-content p {
+  margin-bottom: 20px; /* Add space below the paragraph */
+}
+
+/* Leaderboard Table Styles */
+.leaderboard {
+  display: flex;
+  justify-content: center; /* Horizontally center the table */
+  align-items: center; /* Vertically center the table */
+  flex-grow: 1; /* Take up remaining space below the highlighted parts */
+  width: 100%; /* Ensure the container spans the full width */
+}
+
+.leaderboard table {
+  width: auto; /* Adjust table width to fit content */
+  border-collapse: collapse;
+}
+
+.leaderboard table th,
+.leaderboard table td {
+  text-align: center; /* Center-align text in table cells */
+  padding: 10px;
+  border: 1px solid #ddd; /* Add a border for better readability */
+}
+
+.leaderboard table th {
+  background-color: #f4f4f4; /* Light gray background for table headers */
+  font-weight: bold;
+}
+
+.leaderboard table td {
+  vertical-align: middle; /* Ensure text is vertically centered */
 }
