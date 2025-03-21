@@ -103,6 +103,50 @@ body {
   text-decoration: underline;
 }
 
+.navbar .dropdown {
+  position: relative;
+  cursor: pointer; /* Ensure the cursor changes to indicate interactivity */
+}
+
+.navbar .dropdown-toggle {
+  display: inline-block;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar .dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 100%; /* Position below the dropdown toggle */
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+  min-width: 150px; /* Ensure the dropdown has a minimum width */
+}
+
+.navbar .dropdown-menu li {
+  padding: 10px 20px;
+}
+
+.navbar .dropdown-menu li a {
+  text-decoration: none;
+  color: black;
+  display: block; /* Ensure the link spans the full width */
+}
+
+.navbar .dropdown-menu li a:hover {
+  background-color: #f0f0f0; /* Add a hover effect for dropdown items */
+}
+
+.navbar .dropdown:hover .dropdown-menu {
+  display: block; /* Show the dropdown menu on hover */
+}
+
 /* Main Content Styles */
 .main-content {
   padding: 20px;

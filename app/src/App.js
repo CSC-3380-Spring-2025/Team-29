@@ -1,56 +1,113 @@
 import React, { useState } from "react";
-import logo from './garden.png';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"; // Import Link
 import './App.css';
 
-function App() {
+function Leaderboard({ leaderboard, handleVote }) {
+  return (
+    <div className="main-content">
+      <h1> Tournament Leaderboard </h1>
+      <p> Vote for your favorite poets in the tournament!</p>
+      <div className="leaderboard">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Poet</th>
+              <th>Votes</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaderboard.map((poet, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{poet.name}</td>
+                <td>{poet.votes}</td>
+                <td>
+                  <button onClick={() => handleVote(index)}>Vote</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
-  const [searchTerm, setSearchTerm] = useState(""); // State to track the search input
+function Submission() {
+  return (
+    <div className="main-content">
+      <h1> Submission Section </h1>
+      <p> Submit your poems for the tournament here!</p>
+    </div>
+  );
+}
+
+function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [leaderboard, setLeaderboard] = useState([
+    { name: "Poet A", votes: 120 },
+    { name: "Poet B", votes: 95 },
+    { name: "Poet C", votes: 80 },
+    { name: "Poet D", votes: 60 },
+  ]);
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value); // Update state with the input value
+    setSearchTerm(event.target.value);
   };
 
   const handleSearchSubmit = (event) => {
-    event.preventDefault(); // Prevent form from refreshing the page
-    console.log("Searching for:", searchTerm); // Log the search term (replace with your search logic)
+    event.preventDefault();
+    console.log("Searching for:", searchTerm);
+  };
+
+  const handleVote = (index) => {
+    const updatedLeaderboard = [...leaderboard];
+    updatedLeaderboard[index].votes += 1;
+    setLeaderboard(updatedLeaderboard);
   };
 
   return (
-    <div className="App">
-      { /* <img src={logo} className="App-logo" alt="logo" /> */}
-      {/* Navigation Bar */}
-      <nav className = "navbar">
-        <div className = "navbar-logo">
-          <span> Poetry Garden </span>
-        </div>
-        <ul className = "navbar-links">
-          <li><a href="/">Home</a></li>
-          <li><a href ="/my-garden" className ="active" >My Garden</a></li>
-          <li><a href ="/community-garden" >Community Garden</a></li>
-          <li><a href = "/my-profile" >Profile</a></li>
-          <li><a href = "/tournament" >Tournament</a></li>
-        </ul>
-        <form className="search-bar" onSubmit={handleSearchSubmit}>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm} // Controlled input
-            onChange={handleSearchChange} // Handle input change
-          />
-          <button type="submit">Search</button>
-        </form>
-      </nav>
-      {/* Main Content */}
-      <div className = "main-content">
-        <h1> My Garden </h1>
-        <p> Welcome to your poetry garden!</p>
-        <div className = "Garden buttons">
-          <button>Poem of the day</button>
-          <button>My Poems</button>
-          <button>Create</button>
+    <Router>
+      <div className="App">
+        {/* Navigation Bar */}
+        <nav className="navbar">
+          <div className="navbar-logo">
+            <span> Poetry Garden </span>
           </div>
+          <ul className="navbar-links"> {/* Fixed closing tag */}
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/my-garden">My Garden</Link></li>
+            <li><Link to="/community-garden">Community Garden</Link></li>
+            <li><Link to="/my-profile">Profile</Link></li>
+            <li className="dropdown">
+              <span className="dropdown-toggle">Tournament</span>
+              <ul className="dropdown-menu">
+                <li><Link to="/tournament/leaderboard">Leaderboard</Link></li>
+                <li><Link to="/tournament/submission">Submission</Link></li>
+              </ul>
+            </li>
+          </ul>
+          <form className="search-bar" onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <button type="submit">Search</button>
+          </form>
+        </nav>
+        <Routes>
+          <Route
+            path="/tournament/leaderboard"
+            element={<Leaderboard leaderboard={leaderboard} handleVote={handleVote} />}
+          />
+          <Route path="/tournament/submission" element={<Submission />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
