@@ -44,10 +44,12 @@ function App() {
       <div className = "main-content">
         <h1> My Garden </h1>
         <p> Welcome to your poetry garden!</p>
+        <div className = "Garden buttons">
+          <button>Poem of the day</button>
+          <button>My Poems</button>
+          <button>Create</button>
+          </div>
       </div>
-
-
-
     </div>
   );
 }
