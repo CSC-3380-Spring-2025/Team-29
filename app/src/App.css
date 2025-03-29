@@ -188,3 +188,10 @@ body {
   font-size: 14px;
   color: #333;
 }
+
+.garden-item img {
+  pointer-events: none; /* Prevent the image from interfering with drag-and-drop */
+  background: none; /* Remove any background */
+  border: none; /* Remove any borders */
+  box-shadow: none; /* Remove any box shadow */
+}

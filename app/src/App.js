@@ -28,7 +28,12 @@ function App() {
   };
 
   const handlePoemSubmit = () => {
-    const placeholder = newPoem.theme === "love" ? ":rose:" : newPoem.theme === "hope" ? ":sunflower:" : ":seedling:";
+    const placeholder =
+      newPoem.theme === "love"
+        ? ":rose:"
+        : newPoem.theme === "hope"
+        ? "sunflower2.png" // Use image for "hope" theme
+        : ":seedling:";
     setGarden((prev) => [...prev, { ...newPoem, placeholder }]); // Add the new poem to the garden
     setCreatingPoem(false); // Hide the poem creation form
     setNewPoem({ title: "", content: "", theme: "" }); // Reset the new poem state
@@ -135,15 +140,28 @@ function App() {
                     className="garden-item"
                     draggable
                     onDragStart={(event) => handleDragStart(event, index)}
-                    onDoubleClick={() => handleDoubleClick(index)}
+                    onDoubleClick={() => handleDoubleClick(index)} // Trigger modal on double-click
                     style={{
                       position: "absolute",
                       left: `${position.x}px`,
                       top: `${position.y}px`,
+                      background: "none", // Ensure no background
+                      border: "none", // Ensure no border
+                      boxShadow: "none", // Ensure no shadow
                     }}
                   >
-                    <span>{poem.placeholder}</span>
-                    <p>{poem.title}</p>
+                    {poem.theme === "hope" ? (
+                      <img
+                        src="/sunflower2.png" // Ensure the correct path to the image
+                        alt="Sunflower"
+                        style={{ width: "50px", height: "50px" }}
+                      />
+                    ) : (
+                      <>
+                        <span>{poem.placeholder}</span>
+                        <p>{poem.title}</p>
+                      </>
+                    )}
                   </div>
                 );
               })}
