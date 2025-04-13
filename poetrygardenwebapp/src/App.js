@@ -1,34 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { auth, db } from "./firebase";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
-import "./styles.css"; // Ensure you have corresponding styles
+import "./styles.css";
 
 const App = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [usersList, setUsersList] = useState([]);
+
+  const navigate = useNavigate();
 
   // Track login status
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log("👤 Auth State Changed:", currentUser);
+      if (currentUser) {
+        navigate("/profile"); // Navigate to profile if user is logged in
+      }
     });
-  }, []);
+  }, [navigate]);
 
   // Handle sign up
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       console.log("✅ Registered User:", userCredential.user);
+      navigate("/profile"); // Navigate to profile after signup
     } catch (error) {
       console.error("❌ Sign Up Error:", error.message);
     }
@@ -39,6 +43,7 @@ const App = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("✅ Logged In:", auth.currentUser.email);
+      navigate("/profile"); // Navigate to profile after login
     } catch (error) {
       console.error("❌ Login Error:", error.message);
     }
@@ -48,68 +53,70 @@ const App = () => {
   const handleLogout = async () => {
     await signOut(auth);
     console.log("✅ Logged Out");
-  };
-
-  // Fetch users from Firestore
-  const fetchUsers = async () => {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    const usersArray = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setUsersList(usersArray);
-    console.log("📄 Fetched Users:", usersArray);
+    navigate("/"); // Navigate back to login page after logout
   };
 
   return (
     <div className="container">
-      {user ? (
-        <div className="dashboard">
-          <h2>Welcome, {user.email}</h2>
-          <button onClick={handleLogout}>Log Out</button>
-          <button onClick={fetchUsers}>Fetch Users from Firestore</button>
-          <ul>
-            {usersList.map((u) => (
-              <li key={u.id}>{u.email}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div className="auth-form">
-          <header>{isSignup ? "Signup" : "Login"}</header>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder={isSignup ? "Create a password" : "Enter your password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {isSignup ? (
-            <button onClick={handleSignUp}>Signup</button>
-          ) : (
-            <button onClick={handleLogin}>Login</button>
-          )}
-          <div className="switch-container">
-            {isSignup ? (
-              <span>
-                Already have an account?{" "}
-                <button className="switch" onClick={() => setIsSignup(false)}>
-                  Login
-                </button>
-              </span>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="auth-form">
+              <header>{isSignup ? "Signup" : "Login"}</header>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder={isSignup ? "Create a password" : "Enter your password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {isSignup ? (
+                <button onClick={handleSignUp}>Signup</button>
+              ) : (
+                <button onClick={handleLogin}>Login</button>
+              )}
+              <div className="switch-container">
+                {isSignup ? (
+                  <span>
+                    Already have an account?{" "}
+                    <button className="switch" onClick={() => setIsSignup(false)}>
+                      Login
+                    </button>
+                  </span>
+                ) : (
+                  <span>
+                    Don't have an account?{" "}
+                    <button className="switch" onClick={() => setIsSignup(true)}>
+                      Signup
+                    </button>
+                  </span>
+                )}
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            user ? (
+              <div className="dashboard">
+                <h2>Welcome, {user.email}</h2>
+                <button onClick={handleLogout}>Log Out</button>
+              </div>
             ) : (
-              <span>
-                Don't have an account?{" "}
-                <button className="switch" onClick={() => setIsSignup(true)}>
-                  Signup
-                </button>
-              </span>
-            )}
-          </div>
-        </div>
-      )}
+              <div>
+                <h2>Please log in to view your profile.</h2>
+              </div>
+            )
+          }
+        />
+      </Routes>
     </div>
   );
 };
