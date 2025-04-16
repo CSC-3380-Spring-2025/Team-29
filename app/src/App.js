@@ -121,6 +121,15 @@ function App() {
           <Route
             path="/"
             element={
+              <div className="home-content">
+                <h1>Welcome to Poetry Garden</h1>
+                <p>Explore and create beautiful poems!</p>
+              </div>
+            }
+          />
+          <Route
+            path="/my-garden"
+            element={
               <div className="main-content">
                 <h1> My Garden </h1>
                 <p> Welcome to your poetry garden!</p>
@@ -275,7 +284,7 @@ function PoemDetail({ poems }) {
     <div className="poem-detail">
       <h2>{poem.title}</h2>
       <p>{poem.content}</p>
-      <Link to="/">Back to My Poems</Link>
+      <Link to="/my-garden">Back to My Garden</Link>
     </div>
   );
 }
