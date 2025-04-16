@@ -149,7 +149,10 @@ function App() {
                       <option value="">Select a Theme</option>
                       <option value="love">Love</option>
                       <option value="hope">Hope</option>
-                      <option value="nature">Nature</option>
+                      <option value="melancholy">Melancholy</option>
+                      <option value="joy">Joy</option>
+                      <option value="sadness">Sadness</option>
+                      <option value="others">Others</option>
                     </select>
                     <button onClick={handlePoemSubmit} disabled={!newPoem.title || !newPoem.content || !newPoem.theme}>
                       Submit Poem
