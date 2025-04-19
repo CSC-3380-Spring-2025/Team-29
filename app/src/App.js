@@ -45,6 +45,8 @@ function App() {
         ? ":rose:"
         : newPoem.theme === "hope"
         ? "sunflower2.png" // Use image for "hope" theme
+        : newPoem.theme === "others"
+        ? "jack-in-the-pulpit.jpg" // Use image for "others" theme
         : ":seedling:";
 
     const newPoemEntry = {
@@ -106,15 +108,6 @@ function App() {
             <li><Link to="/my-profile">Profile</Link></li>
             <li><Link to="/tournament">Tournament</Link></li>
           </ul>
-          <form className="search-bar" onSubmit={(event) => event.preventDefault()}>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm} // Controlled input
-              onChange={handleSearchChange} // Handle input change
-            />
-            <button type="submit">Search</button>
-          </form>
         </nav>
         {/* Main Content */}
         <Routes>
@@ -166,6 +159,10 @@ function App() {
                     <button onClick={handlePoemSubmit} disabled={!newPoem.title || !newPoem.content || !newPoem.theme}>
                       Submit Poem
                     </button>
+                    {/* Back Button */}
+                    <button onClick={() => setCreatingPoem(false)} style={{ marginTop: "10px" }}>
+                      Back
+                    </button>
                   </div>
                 )}
                 {showMyPoems && (
@@ -184,6 +181,10 @@ function App() {
                         </li>
                       ))}
                     </ul>
+                    {/* Back Button */}
+                    <button onClick={() => setShowMyPoems(false)} style={{ marginTop: "10px" }}>
+                      Back
+                    </button>
                   </div>
                 )}
                 {!creatingPoem && !showMyPoems && (
@@ -214,6 +215,12 @@ function App() {
                                 alt="Sunflower"
                                 style={{ width: "50px", height: "50px" }}
                               />
+                            ) : poem.theme === "others" ? (
+                              <img
+                                src="/jack-in-the-pulpit.png" // Ensure the correct path to the image
+                                alt="Jack-in-the-Pulpit"
+                                style={{ width: "50px", height: "50px" }}
+                                />
                             ) : (
                               <>
                                 <span>{poem.placeholder}</span>
