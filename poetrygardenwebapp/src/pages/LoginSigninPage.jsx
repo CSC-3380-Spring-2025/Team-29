@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { auth, db } from "./firebase";
+import { auth, db } from "../firebase"; 
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,16 +8,16 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
-import "./styles.css"; // Ensure you have corresponding styles
+import "../styles/styles.css";
 
-const App = () => {
+
+const LoginSigninPage = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [usersList, setUsersList] = useState([]);
 
-  // Track login status
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -24,7 +25,6 @@ const App = () => {
     });
   }, []);
 
-  // Handle sign up
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -34,7 +34,6 @@ const App = () => {
     }
   };
 
-  // Handle login
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
@@ -44,13 +43,11 @@ const App = () => {
     }
   };
 
-  // Handle logout
   const handleLogout = async () => {
     await signOut(auth);
     console.log("✅ Logged Out");
   };
 
-  // Fetch users from Firestore
   const fetchUsers = async () => {
     const querySnapshot = await getDocs(collection(db, "users"));
     const usersArray = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -114,4 +111,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default LoginSigninPage;
