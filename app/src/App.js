@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Link, Routes, useParams } from "react-router-dom";
 import './App.css';
-
+import { useEffect } from 'react';
+import {
+  fetchAllGardens,
+  createGardenPoem,
+  onGardensUpdate
+} from './firebase';
 function App() {
   const [searchTerm, setSearchTerm] = useState(""); // State to track the search input
   const [garden, setGarden] = useState([]); // State to track poems in the garden
@@ -257,6 +262,7 @@ function App() {
             }
           />
           <Route path="/poem/:id" element={<PoemDetail poems={poems} />} />
+          <Route path="/my-garden" element={<MyGarden />} />
         </Routes>
       </div>
     </Router>
