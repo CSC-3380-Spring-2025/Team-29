@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import MyGarden from "./MyGarden";
 import { BrowserRouter as Router, Route, Link, Routes, useParams } from "react-router-dom";
 import './App.css';
 import { useEffect } from 'react';
