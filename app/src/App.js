@@ -47,6 +47,8 @@ function App() {
         ? "sunflower2.png" // Use image for "hope" theme
         : newPoem.theme === "others"
         ? "jack-in-the-pulpit.jpg" // Use image for "others" theme
+        : newPoem.theme === "melancholy"
+        ? "whitelily.png" // Use image for "melancholy" theme
         : ":seedling:";
 
     const newPoemEntry = {
@@ -221,6 +223,12 @@ function App() {
                                 alt="Jack-in-the-Pulpit"
                                 style={{ width: "50px", height: "50px" }}
                                 />
+                            ) : poem.theme ==="melancholy" ? (
+                              <img
+                                src="whitelily.png" // Ensure the correct path to the image
+                                alt="White Lily"
+                                style={{ width: "50px", height: "50px" }}
+                              />
                             ) : (
                               <>
                                 <span>{poem.placeholder}</span>
