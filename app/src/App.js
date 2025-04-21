@@ -42,7 +42,7 @@ function App() {
   const handlePoemSubmit = () => {
     const placeholder =
       newPoem.theme === "love"
-        ? ":rose:"
+        ? "rose.png" // Use image for "love" theme
         : newPoem.theme === "hope"
         ? "sunflower2.png" // Use image for "hope" theme
         : newPoem.theme === "others"
@@ -227,6 +227,12 @@ function App() {
                               <img
                                 src="whitelily.png" // Ensure the correct path to the image
                                 alt="White Lily"
+                                style={{ width: "50px", height: "50px" }}
+                              />
+                            ) : poem.theme ==="love" ? (
+                              <img
+                                src="rose.png" // Ensure the correct path to the image
+                                alt="Rose"
                                 style={{ width: "50px", height: "50px" }}
                               />
                             ) : (
