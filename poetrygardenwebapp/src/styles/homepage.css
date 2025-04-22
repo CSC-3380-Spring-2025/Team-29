@@ -1,7 +1,133 @@
-.big-button {
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 100px;
-    size: 50px;
+
+  
+  img {
+  
+    animation: bounce 6.0s infinite; /* Apply the bounce animation */
+    transform-origin: center bottom; /* Set the origin for the bounce */
+}
+@keyframes bounce {
+  0%, 100% {
+      transform: translateY(0); /* Start and end at the original position */
   }
- 
+  50% {
+      transform: translateY(-10px); /* Move up by 10px */
+  }
+}
+.btn {
+  margin: 0.75rem;
+  padding: 0.75rem 1.125rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(#4A6E5A, #7B9E89); /* Muted Forest Green to Olive Gray */
+  color: #FFF8E7; /* Cream text */
+  box-shadow: inset 0pt 6pt 4.5pt -3pt #6B8F7A, 0pt 6pt 7.5pt -4.5pt #0009;
+  border-bottom: 3pt solid #355E3B; /* Forest green for depth */
+  transition: all 0.5s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(#E6BDBD, #BFD8C2); /* Dusty Rose Tint to Soft Sage */
+  border-bottom: 6pt solid #A97D7D; /* Deeper dusty rose for hover border */
+  translate: 0pt -1.5pt;
+  color: #355E3B; /* Forest green text for contrast on light hover background */
+}
+
+.btn-primary:active {
+  box-shadow: inset 0pt 6pt 4.5pt -3pt #6B8F7A, 0pt 6pt 7.5pt -4.5pt #0000;
+  border-bottom: 1.5pt solid #355E3B;
+  translate: 0pt 0pt;
+}
+.why-section {
+  text-align: center;
+  margin-top: 300px;
+  padding: 20px;
+  background-color: #f9f6f1; /* Light background for contrast */
+  border-top: 2px solid #ddd;
+}
+
+.why-section h2 {
+  font-size: 2rem;
+  color: #4a6e5a; /* Muted forest green */
+  margin-bottom: 20px;
+}
+
+.why-section p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  margin-left: 100px;
+      margin-right: 100px;
+}
+
+.flower-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.flower-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.flower-image:hover {
+  transform: scale(10); /* Slight zoom effect on hover */
+}
+.user-reviews {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #f4f4f4; /* Light gray background for contrast */
+  border-top: 2px solid #ddd;
+}
+
+.user-reviews h2 {
+  font-size: 2rem;
+  color: #4a6e5a; /* Muted forest green */
+  margin-bottom: 20px;
+}
+
+.review {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+}
+.home-style-button {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.home-style-button:hover {
+  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  transform: scale(1.02);
+}

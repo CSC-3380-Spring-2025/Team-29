@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { auth, db } from "../firebase"; 
-
+import { auth, db } from "../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import "../styles/styles.css";
+import { useNavigate } from "react-router-dom";
+
 
 
 const LoginSigninPage = () => {
   const [isSignup, setIsSignup] = useState(false);
+  const [isResetPassword, setIsResetPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [usersList, setUsersList] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
@@ -25,35 +30,69 @@ const LoginSigninPage = () => {
     });
   }, []);
 
-  const handleSignUp = async () => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("✅ Registered User:", userCredential.user);
-    } catch (error) {
-      console.error("❌ Sign Up Error:", error.message);
-    }
-  };
+  const getFriendlyErrorMessage = (errorCode) => {
+  switch (errorCode) {
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+      return "Invalid email or password. Please try again.";
+    case "auth/user-not-found":
+      return "No account found with this email.";
+    case "auth/email-already-in-use":
+      return "This email is already registered. Try logging in.";
+    case "auth/weak-password":
+      return "Password must be at least 6 characters.";
+    case "auth/invalid-email":
+      return "Please enter a valid email address.";
+    default:
+      return "Something went wrong. Please try again.";
+  }
+};
 
-  const handleLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log("✅ Logged In:", auth.currentUser.email);
-    } catch (error) {
-      console.error("❌ Login Error:", error.message);
-    }
-  };
+const handleSignUp = async () => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log("✅ Registered User:", userCredential.user);
+    setErrorMessage("");
+    navigate("/profile");
+  } catch (error) {
+    console.error("❌ Sign Up Error:", error.message);
+    setErrorMessage(getFriendlyErrorMessage(error.code));
+  }
+};
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    console.log("✅ Logged Out");
-  };
+const handleLogin = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    setErrorMessage("");
+    navigate("/communitypage"); // Navigate to the community page
+  } catch (error) {
+    console.error("❌ Login Error:", error.message);
+    setErrorMessage(getFriendlyErrorMessage(error.code));
+  }
+};
+const navigate = useNavigate();
+const handleForgotPassword = async () => {
+  if (!email) {
+    setErrorMessage("Please enter your email to reset your password.");
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    setSuccessMessage("Password reset email sent! Check your inbox.");
+    setErrorMessage("");
+  } catch (error) {
+    console.error("❌ Forgot Password Error:", error.message);
+    setErrorMessage(getFriendlyErrorMessage(error.code));
+  }
+};
 
-  const fetchUsers = async () => {
-    const querySnapshot = await getDocs(collection(db, "users"));
-    const usersArray = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setUsersList(usersArray);
-    console.log("📄 Fetched Users:", usersArray);
-  };
+const handleLogout = async () => {
+  await signOut(auth);
+  console.log("✅ Logged Out");
+};
+
+
+ 
 
   return (
     <div className="container">
@@ -61,16 +100,45 @@ const LoginSigninPage = () => {
         <div className="dashboard">
           <h2>Welcome, {user.email}</h2>
           <button onClick={handleLogout}>Log Out</button>
-          <button onClick={fetchUsers}>Fetch Users from Firestore</button>
+          
           <ul>
             {usersList.map((u) => (
               <li key={u.id}>{u.email}</li>
             ))}
           </ul>
         </div>
+      ) : isResetPassword ? (
+        <div className="auth-form">
+          <header>Reset Password</header>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button onClick={handleForgotPassword}>Send Reset Email</button>
+          <div className="switch-container">
+            <span>
+              <a
+                href="#"
+                className="switch"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsResetPassword(false);
+                }}
+              >
+                Back to Login
+              </a>
+            </span>
+          </div>
+        </div>
       ) : (
         <div className="auth-form">
           <header>{isSignup ? "Signup" : "Login"}</header>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {successMessage && <p className="success-message">{successMessage}</p>}
           <input
             type="email"
             placeholder="Enter your email"
@@ -88,20 +156,51 @@ const LoginSigninPage = () => {
           ) : (
             <button onClick={handleLogin}>Login</button>
           )}
+          
+
+          {!isSignup && (
+            <div className="forgot-password">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsResetPassword(true);
+                }}
+              >
+                Forgot your password?
+              </a>
+            </div>
+          )}
+
           <div className="switch-container">
             {isSignup ? (
+              
               <span>
                 Already have an account?{" "}
-                <button className="switch" onClick={() => setIsSignup(false)}>
+                <a
+                  href="#"
+                  className="switch"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsSignup(false);
+                  }}
+                >
                   Login
-                </button>
+                </a>
               </span>
             ) : (
               <span>
                 Don't have an account?{" "}
-                <button className="switch" onClick={() => setIsSignup(true)}>
+                <a
+                  href="#"
+                  className="switch"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsSignup(true);
+                  }}
+                >
                   Signup
-                </button>
+                </a>
               </span>
             )}
           </div>
