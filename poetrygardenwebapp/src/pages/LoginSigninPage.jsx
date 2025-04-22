@@ -96,18 +96,7 @@ const handleLogout = async () => {
 
   return (
     <div className="container">
-      {user ? (
-        <div className="dashboard">
-          <h2>Welcome, {user.email}</h2>
-          <button onClick={handleLogout}>Log Out</button>
-          
-          <ul>
-            {usersList.map((u) => (
-              <li key={u.id}>{u.email}</li>
-            ))}
-          </ul>
-        </div>
-      ) : isResetPassword ? (
+      { isResetPassword ? (
         <div className="auth-form">
           <header>Reset Password</header>
           {errorMessage && <p className="error-message">{errorMessage}</p>}
