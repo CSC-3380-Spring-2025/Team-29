@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { auth, db, addGarden, fetchGardens } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth'; // ✅ Add this import
+import { db, addGarden, fetchGardens } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
 import '../styles/communitypage.css';
+import Flower1 from '../images/Flower1.jpg'; // Example flower image
+import Flower2 from '../images/Flower2.jpg'; // Example flower image
+import Flower3 from '../images/Flower3.jpg'; // Example flower image
 
 const CommunityPage = () => {
   const [newPoem, setNewPoem] = useState({ title: '', content: '', theme: '' });
   const [poems, setPoems] = useState([]);
   const [garden, setGarden] = useState([]);
   const [creatingPoem, setCreatingPoem] = useState(false);
-  const [user, setUser] = useState(null); // ✅ Track logged-in user
+  const [user, setUser] = useState(null);
+  const [selectedPoem, setSelectedPoem] = useState(null);
 
-  // ✅ Track auth state (stay logged in)
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // null if not logged in
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
     });
-    return () => unsubscribe(); // Clean up listener
-  }, []);
 
-  // ✅ Load poems on mount
-  useEffect(() => {
     const loadPoems = async () => {
       try {
         const loadedPoems = await fetchGardens();
@@ -29,7 +29,10 @@ const CommunityPage = () => {
         console.error("Error loading gardens:", err);
       }
     };
+
     loadPoems();
+
+    return () => unsubscribe();
   }, []);
 
   const handlePoemSubmit = async () => {
@@ -37,7 +40,7 @@ const CommunityPage = () => {
       newPoem.theme === "love"
         ? ":rose:"
         : newPoem.theme === "hope"
-        ? "sunflower2.png"
+        ? "Flower2.jpg"
         : ":seedling:";
 
     const newPoemEntry = {
@@ -45,13 +48,15 @@ const CommunityPage = () => {
       content: newPoem.content,
       theme: newPoem.theme,
       placeholder,
+      published: true,
+      userEmail: user?.email || "Anonymous",
     };
 
     try {
       await addGarden(newPoemEntry);
-      const newEntryWithId = { id: Date.now(), ...newPoemEntry };
-      setPoems((prev) => [...prev, newEntryWithId]);
-      setGarden((prev) => [...prev, newEntryWithId]);
+      const entryWithId = { id: Date.now(), ...newPoemEntry };
+      setPoems((prev) => [...prev, entryWithId]);
+      setGarden((prev) => [...prev, entryWithId]);
       setCreatingPoem(false);
       setNewPoem({ title: "", content: "", theme: "" });
     } catch (err) {
@@ -64,21 +69,34 @@ const CommunityPage = () => {
     setNewPoem((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFlowerClick = (poem) => {
+    setSelectedPoem(poem);
+  };
+
+  const closeModal = () => {
+    setSelectedPoem(null);
+  };
+
+ const getFlowerImage = (placeholder) => {
+  if (placeholder === ":rose:") return Flower1; // Use imported Flower1
+  if (placeholder === "Flower2.jpg") return Flower2; // Use imported Flower2
+  return Flower3; // Default to imported Flower3
+};
+
   return (
     <div>
-      {/* ✅ Navigation Bar */}
+      {/* Navigation Bar */}
       <nav className="navbar">
         <h2 className="navbar-title">Poetry Garden</h2>
         <div className="navbar-links">
           <a href="/">Home</a>
           <a href="/community">Community</a>
           <a href="/about">About</a>
-          {user && (
-            <span className="navbar-user">Welcome, {user.email}</span>
-          )}
+          {user && <span className="user-email">{user.email}</span>}
         </div>
       </nav>
 
+      {/* Page Content */}
       <div className="page-padding">
         <h1>Community Garden</h1>
         <form
@@ -126,21 +144,34 @@ const CommunityPage = () => {
           <button type="submit">Submit Poem</button>
         </form>
 
-        <h2>Your Poems</h2>
-        <div>
-          {poems.length > 0 ? (
-            poems.map((poem) => (
-              <div key={poem.id} className="poem-card">
-                <h3>{poem.title}</h3>
-                <p>{poem.content}</p>
-                <p><strong>Theme:</strong> {poem.theme}</p>
-                <p><strong>Placeholder:</strong> {poem.placeholder}</p>
+        <h2>Your Garden</h2>
+        <div className="poem-flower-grid">
+          {poems
+            .filter((poem) => poem.published && poem.userEmail === user?.email)
+            .map((poem) => (
+              <div key={poem.id} className="flower-wrapper">
+                <img
+                  src={getFlowerImage(poem.placeholder)}
+                  alt={poem.theme}
+                  className="flower-icon"
+                  onClick={() => handleFlowerClick(poem)}
+                />
+                <span className="tooltip">{poem.title}</span>
               </div>
-            ))
-          ) : (
-            <p>No poems yet. Submit your first poem!</p>
-          )}
+            ))}
         </div>
+
+        {/* Modal */}
+        {selectedPoem && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h2>{selectedPoem.title}</h2>
+              <p><strong>Poem:</strong> {selectedPoem.content}</p>
+              <p><strong>Mood:</strong> {selectedPoem.theme}</p>
+              <button onClick={closeModal}>Close</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
