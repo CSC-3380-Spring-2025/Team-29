@@ -155,7 +155,6 @@ function App() {
                       <option value="hope">Hope</option>
                       <option value="melancholy">Melancholy</option>
                       <option value="joy">Joy</option>
-                      <option value="sadness">Sadness</option>
                       <option value="others">Others</option>
                     </select>
                     <button onClick={handlePoemSubmit} disabled={!newPoem.title || !newPoem.content || !newPoem.theme}>
