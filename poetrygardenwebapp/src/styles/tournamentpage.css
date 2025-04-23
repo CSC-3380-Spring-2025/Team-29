@@ -4,7 +4,6 @@
     margin: auto;
   }
   
-  
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -141,18 +140,4 @@
     padding-top: 70px; /* Prevent content from overlapping the navbar */
   }
 
-  .navbar-logo {
-    display: flex;
-    align-items: center;
-  }
-
-  .logo {
-    width: 200px; /* Shrink the logo */
-    margin-top: center;
-    height: auto; /* Maintain aspect ratio */
-    margin-right: 20px; /* Add spacing between the logo and links */
-    transition: none; /* Disable any animations or transitions */
-    animation: none; /* Ensure no animations are applied */
-  }
-  
 

@@ -6,6 +6,7 @@ import '../styles/communitypage.css';
 import Flower1 from '../images/Flower1.jpg'; // Example flower image
 import Flower2 from '../images/Flower2.jpg'; // Example flower image
 import Flower3 from '../images/Flower3.jpg'; // Example flower image
+import Poetrygardenlogo from '../images/Poetrygardenlogo.png'; 
 
 const CommunityPage = () => {
   const [newPoem, setNewPoem] = useState({ title: '', content: '', theme: '' });
@@ -87,10 +88,13 @@ const CommunityPage = () => {
     <div>
       {/* Navigation Bar */}
       <nav className="navbar">
-        <h2 className="navbar-title">Poetry Garden</h2>
+        <div className="navbar-logo">
+          <img src={Poetrygardenlogo} alt="Logo" className="logo" />
+        </div>
         <div className="navbar-links">
           <a href="/">Home</a>
           <a href="/community">Community</a>
+          <a href="/tournament">Tournament</a>
           <a href="/about">About</a>
           {user && <span className="user-email">{user.email}</span>}
         </div>
