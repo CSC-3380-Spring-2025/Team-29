@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db, addGarden, fetchGardens } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, onGardensUpdate } from '../firebase';
 import '../styles/communitypage.css';
 import Flower1 from '../images/Flower1.jpg'; // Example flower image
 import Flower2 from '../images/Flower2.jpg'; // Example flower image
