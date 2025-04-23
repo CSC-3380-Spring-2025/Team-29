@@ -8,7 +8,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
-import "../styles/styles.css";
+import "../styles/loginpage.css";
 import { useNavigate } from "react-router-dom";
 
 

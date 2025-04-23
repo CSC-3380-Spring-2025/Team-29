@@ -20,6 +20,7 @@ const TournamentPage = () => {
           <a href="/">Home</a>
           <a href="/community">Community</a>
           <a href="/tournament">Tournament</a>
+          <a href="/mygarden">My Garden</a>
           <a href="/about">About</a>
           {user && <span className="user-email">{user.email}</span>}
         </div>

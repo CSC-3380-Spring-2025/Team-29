@@ -88,17 +88,18 @@ const CommunityPage = () => {
     <div>
       {/* Navigation Bar */}
       <nav className="navbar">
-        <div className="navbar-logo">
-          <img src={Poetrygardenlogo} alt="Logo" className="logo" />
-        </div>
-        <div className="navbar-links">
-          <a href="/">Home</a>
-          <a href="/community">Community</a>
-          <a href="/tournament">Tournament</a>
-          <a href="/about">About</a>
-          {user && <span className="user-email">{user.email}</span>}
-        </div>
-      </nav>
+              <div className="navbar-logo">
+                <img src={Poetrygardenlogo} alt="Logo" className="logo" />
+              </div>
+              <div className="navbar-links">
+                <a href="/">Home</a>
+                <a href="/community">Community</a>
+                <a href="/tournament">Tournament</a>
+                <a href="/mygarden">My Garden</a>
+                <a href="/about">About</a>
+                {user && <span className="user-email">{user.email}</span>}
+              </div>
+            </nav>
 
       {/* Page Content */}
       <div className="page-padding">

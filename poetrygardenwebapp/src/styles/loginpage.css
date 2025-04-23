@@ -60,25 +60,29 @@ body {
 
 .auth-form input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #8BC34A;
 }
 
 .auth-form button {
   width: 100%;
   padding: 15px;
-  background-color: #007bff;
+  background-color: #FFB6B9;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
   margin-bottom: 15px;
   font-size: 18px;
-  transition: background-color 0.3s;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(140, 195, 74, 0.3);
 }
 
 .auth-form button:hover {
-  background-color: #0056b3;
+  background-color: #FF8C94;
+  transform: scale(1.03);
 }
+
 
 .switch-container {
   margin-top: 10px;
@@ -87,13 +91,13 @@ body {
 .switch {
   background: none;
   border: none;
-  color: #007bff;
+  color: #8BC34A;
   cursor: pointer;
   text-decoration: none;
 }
 
 .switch:hover {
-  color: darkblue;
+  color: #689F38;
 }
 
 .error-message {
@@ -110,12 +114,12 @@ body {
 
 .forgot-password a {
   text-decoration: none;
-  color: blue;
+  color: #8BC34A;
   cursor: pointer;
 }
 
 .forgot-password a:hover {
-  color: darkblue;
+  color: #689F38;
 }
 
 .dashboard {

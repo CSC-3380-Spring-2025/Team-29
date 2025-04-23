@@ -1,0 +1,229 @@
+.garden-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .email-compose-box,
+  .garden-display-box {
+    flex: 1;
+    min-width: 320px;
+    max-width: 700px;
+    background-color: #fffdf9;
+    border: 1px solid #d9cab3;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .garden-display-box h2 {
+    margin-bottom: 20px;
+    color: #4a3f35;
+  }
+  
+  .poem-flower-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+  }
+  .email-compose-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 2rem;
+  }
+  
+  .email-compose-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .email-compose-card h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .email-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  .email-field label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .email-field input,
+  .email-field textarea,
+  .email-field select {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  .email-field textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .send-button {
+    background-color: #3c87f5;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .send-button:hover {
+    background-color: #2c6ed5;
+  }
+  .page-padding {
+    padding: 2rem;
+  }
+  
+  .garden-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  
+  .email-compose-box {
+    flex: 1 1 350px;
+    background-color: #fefefe;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+  }
+  
+  .email-compose-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.2rem;
+  }
+  
+  .form-row label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .form-row input,
+  .form-row textarea,
+  .form-row select {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+    transition: border 0.2s ease;
+  }
+  
+  .form-row input:focus,
+  .form-row textarea:focus,
+  .form-row select:focus {
+    border-color: #3c87f5;
+    outline: none;
+  }
+  
+  .form-row textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .form-row button {
+    background-color: #3c87f5;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .form-row button:hover {
+    background-color: #2c6ed5;
+  }
+  
+  /* Optional: add hover effect for tooltip/flower */
+  .flower-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0.5rem;
+  }
+  
+  .flower-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .flower-icon:hover {
+    transform: scale(1.05);
+  }
+  
+  .tooltip {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    opacity: 0;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  
+  .flower-wrapper:hover .tooltip {
+    opacity: 1;
+  }
+  
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
