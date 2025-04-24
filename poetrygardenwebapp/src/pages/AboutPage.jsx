@@ -84,7 +84,7 @@ const AboutPage = () => {
   <li><strong>Tyler Jackson</strong> – Senior, Cybersecurity (Design Lead) – Created visual mockups and design assets</li>
 </ul>
 
-      </section>
+      </section> 
 
       {/* Why & How */}
       <section className="bg-white p-4 rounded-lg shadow">
