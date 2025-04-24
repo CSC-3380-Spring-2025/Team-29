@@ -99,7 +99,7 @@ const MyGardenPage = () => {
   };
 
   const getFlowerImage = (placeholder) => {
-    if (placeholder === ":rose:") return Flower1; //
+    if (placeholder === "Flower1.png") return Flower1; //
     if (placeholder === "Flower2.png") return Flower2;
     if (placeholder === "Flower3.png") return Flower3;
     if (placeholder === "Flower4.png") return Flower4;
@@ -215,7 +215,7 @@ const MyGardenPage = () => {
                 <img
                   src={getFlowerImage(
                     newPoem.theme === "love"
-                      ? ":rose:"
+                      ? "Flower1.png"
                       : newPoem.theme === "loss" ? "Flower2.png"
                       : newPoem.theme === "time" ? "Flower3.png"
                       : newPoem.theme === "dreams" ? "Flower4.png"

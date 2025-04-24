@@ -178,9 +178,10 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
     cursor: pointer;
     transition: transform 0.2s ease;
+    border-radius: 10px; 
   }
   
   .flower-icon:hover {
