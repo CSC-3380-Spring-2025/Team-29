@@ -131,7 +131,7 @@ const navigate = useNavigate();
         </div>
         <div className="navbar-links">
           <a href="/">Home</a>
-          <a href="/community">Community</a>
+          <a href="/communitypage">Community</a>
           <a href="/tournament">Tournament</a>
           <a href="/mygarden">My Garden</a>
           <a href="/about">About</a>
