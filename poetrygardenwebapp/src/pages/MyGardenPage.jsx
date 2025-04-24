@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { db, addGarden, fetchGardens } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import { db,auth, addGarden, fetchGardens } from '../firebase';
+import { onAuthStateChanged,signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
 import '../styles/mygardenpage.css';
-import Flower1 from '../images/Flower1.jpg';
-import Flower2 from '../images/Flower2.jpg';
-import Flower3 from '../images/Flower3.jpg';
+import Flower1 from '../images/Flower1.png';
+import Flower2 from '../images/Flower2.png';
+import Flower3 from '../images/Flower3.png';
+import Flower4 from '../images/Flower4.png';
+import Flower5 from '../images/Flower5.png';
+import Flower6 from '../images/Flower6.png';
+import Flower7 from '../images/Flower7.png';
+import Flower8 from '../images/Flower8.png';
+import Flower9 from '../images/Flower9.png';
+import Flower10 from '../images/Flower10.png';
+import Flower11 from '../images/Flower11.png';
+import Flower12 from '../images/Flower12.png';
 import Poetrygardenlogo from '../images/Poetrygardenlogo.png';
 
 const MyGardenPage = () => {
+
   const [newPoem, setNewPoem] = useState({ title: '', content: '', theme: '' });
   const [poems, setPoems] = useState([]);
   const [garden, setGarden] = useState([]);
-  const [creatingPoem, setCreatingPoem] = useState(false);
   const [user, setUser] = useState(null);
   const [selectedPoem, setSelectedPoem] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -37,10 +50,18 @@ const MyGardenPage = () => {
 
   const handlePoemSubmit = async () => {
     const placeholder =
-      newPoem.theme === "love"
-        ? ":rose:"
-        : newPoem.theme === "hope"
-        ? "Flower2.jpg"
+      newPoem.theme === "love"? "Flower1.png"
+      :newPoem.theme === "loss"? "Flower2.png"
+        :newPoem.theme === "time"? "Flower3.png"
+        :newPoem.theme === "dreams"? "Flower4.png"
+        :newPoem.theme === "nature"? "Flower5.png"
+        :newPoem.theme === "identity"? "Flower6.png"
+        :newPoem.theme === "silence"? "Flower7.png"
+        :newPoem.theme === "hope"? "Flower8.png"
+        :newPoem.theme === "chaos"? "Flower9.png"
+        :newPoem.theme === "memory"? "Flower10.png"
+        :newPoem.theme === "faith"? "Flower11.png"
+        :newPoem.theme === "solitude"? "Flower12.png" //
         : ":seedling:";
 
     const newPoemEntry = {
@@ -57,7 +78,7 @@ const MyGardenPage = () => {
       const entryWithId = { id: Date.now(), ...newPoemEntry };
       setPoems((prev) => [...prev, entryWithId]);
       setGarden((prev) => [...prev, entryWithId]);
-      setCreatingPoem(false);
+      setShowForm(false);
       setNewPoem({ title: "", content: "", theme: "" });
     } catch (err) {
       console.error("Failed to add poem to Firebase", err);
@@ -78,11 +99,30 @@ const MyGardenPage = () => {
   };
 
   const getFlowerImage = (placeholder) => {
-    if (placeholder === ":rose:") return Flower1;
-    if (placeholder === "Flower2.jpg") return Flower2;
-    return Flower3;
+    if (placeholder === ":rose:") return Flower1; //
+    if (placeholder === "Flower2.png") return Flower2;
+    if (placeholder === "Flower3.png") return Flower3;
+    if (placeholder === "Flower4.png") return Flower4;
+    if (placeholder === "Flower5.png") return Flower5;
+    if (placeholder === "Flower6.png") return Flower6;
+    if (placeholder === "Flower7.png") return Flower7;
+    if (placeholder === "Flower8.png") return Flower8;
+    if (placeholder === "Flower9.png") return Flower9;
+    if (placeholder === "Flower10.png") return Flower10;
+    if (placeholder === "Flower11.png") return Flower11;
+    if (placeholder === "Flower12.png") return Flower12;
+    return Flower12;//
   };
-
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null); // optional: clear local user state
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+  
+const navigate = useNavigate();
   return (
     <div>
       <nav className="navbar">
@@ -95,87 +135,123 @@ const MyGardenPage = () => {
           <a href="/tournament">Tournament</a>
           <a href="/mygarden">My Garden</a>
           <a href="/about">About</a>
-          {user && <span className="user-email">{user.email}</span>}
+          {user && (
+  <div className="user-info">
+    <span className="user-email">{user.email}</span>
+    
+      <button
+        className="logout-button"
+        onClick={async () => {
+          await handleLogout();
+          navigate("/");
+        }}
+    >
+      Logout
+    </button>
+    
+  </div>
+)}
+
+
         </div>
       </nav>
 
       <div className="page-padding">
         <h1>My Garden</h1>
 
-        <div className="garden-container">
-          <div className="email-compose-box">
-            <h2>Compose New Poem</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handlePoemSubmit();
-              }}
-            >
-              <div className="form-row">
-                <label>To:</label>
-                <input type="text" value="Poetry Garden" disabled />
-              </div>
-              <div className="form-row">
-                <label>Subject:</label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={newPoem.title}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Poem Title"
-                />
-              </div>
-              <div className="form-row">
-                <label>Message:</label>
-                <textarea
-                  id="content"
-                  name="content"
-                  value={newPoem.content}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Write your poem here..."
-                />
-              </div>
-              <div className="form-row">
-                <label>Mood:</label>
-                <select
-                  id="theme"
-                  name="theme"
-                  value={newPoem.theme}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select a mood</option>
-                  <option value="love">Love</option>
-                  <option value="hope">Hope</option>
-                  <option value="nature">Nature</option>
-                </select>
-              </div>
-              <div className="form-row">
-                <button type="submit">Send Poem</button>
-              </div>
-            </form>
-          </div>
+        <div className="garden-box">
+        <div className="garden-header">
+  <button
+    className="toggle-button"
+    onClick={() => setShowForm(!showForm)}
+  >
+    {showForm ? '-' : '+'}
+  </button>
+</div>
 
-          <div className="garden-display-box">
-            <h2>Your Garden</h2>
-            <div className="poem-flower-grid">
-              {poems
-                .filter((poem) => poem.published && poem.userEmail === user?.email)
-                .map((poem) => (
-                  <div key={poem.id} className="flower-wrapper">
-                    <img
-                      src={getFlowerImage(poem.placeholder)}
-                      alt={poem.theme}
-                      className="flower-icon"
-                      onClick={() => handleFlowerClick(poem)}
-                    />
-                    <span className="tooltip">{poem.title}</span>
-                  </div>
-                ))}
+          {showForm && (
+            <div className="poem-form">
+              <input
+                type="text"
+                name="title"
+                placeholder="Poem Title"
+                value={newPoem.title}
+                onChange={handleInputChange}
+                required
+              />
+              <textarea
+                name="content"
+                placeholder="Write your poem here..."
+                value={newPoem.content}
+                onChange={handleInputChange}
+                required
+              />
+              <select
+                name="theme"
+                value={newPoem.theme}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Select Theme</option>
+                <option value="love">Love</option>
+                <option value="loss">Loss</option>
+                <option value="time">Time</option>
+                <option value="dreams">Dreams</option>
+                <option value="nature">Nature</option>
+                <option value="identity">Identity</option>
+                <option value="silence">Silence</option>
+                <option value="hope">Hope</option>
+                <option value="chaos">Chaos</option>
+                <option value="memory">Memory</option>
+                <option value="faith">Faith</option>
+                <option value="solitude">Solitude</option>
+
+
+                
+              </select>
+
+              {newPoem.theme && (
+                <img
+                  src={getFlowerImage(
+                    newPoem.theme === "love"
+                      ? ":rose:"
+                      : newPoem.theme === "loss" ? "Flower2.png"
+                      : newPoem.theme === "time" ? "Flower3.png"
+                      : newPoem.theme === "dreams" ? "Flower4.png"
+                      : newPoem.theme === "nature" ? "Flower5.png"
+                      : newPoem.theme === "identity" ? "Flower6.png"
+                      : newPoem.theme === "silence" ? "Flower7.png"
+                      : newPoem.theme === "hope" ? "Flower8.png"
+                      : newPoem.theme === "chaos" ? "Flower9.png"
+                      : newPoem.theme === "memory" ? "Flower10.png"
+                      : newPoem.theme === "faith" ? "Flower11.png"
+                      : newPoem.theme === "solitude" ? "Flower12.png"
+                      
+                      : ":seedling:"
+                  )}
+                  alt="Preview Flower"
+                  className="flower-preview"
+                />
+              )}
+
+              <button onClick={handlePoemSubmit}>Send Poem</button>
             </div>
+          )}
+
+          <div className="poem-flower-grid">
+            {poems
+              .filter((poem) => poem.published && poem.userEmail === user?.email)
+              .map((poem) => (
+                <div key={poem.id} className="flower-wrapper">
+                  <img
+                    src={getFlowerImage(poem.placeholder)}
+                    alt={poem.theme}
+                    className="flower-icon"
+                    onClick={() => handleFlowerClick(poem)}
+                  />
+                  <span className="tooltip">{poem.title}</span>
+                </div>
+              ))}
           </div>
         </div>
 
@@ -184,7 +260,7 @@ const MyGardenPage = () => {
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h2>{selectedPoem.title}</h2>
               <p><strong>Poem:</strong> {selectedPoem.content}</p>
-              <p><strong>Mood:</strong> {selectedPoem.theme}</p>
+              <p><strong>Theme:</strong> {selectedPoem.theme}</p>
               <button onClick={closeModal}>Close</button>
             </div>
           </div>
@@ -195,4 +271,3 @@ const MyGardenPage = () => {
 };
 
 export default MyGardenPage;
-
