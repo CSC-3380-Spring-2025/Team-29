@@ -7,6 +7,7 @@ import CommunityPage from "./pages/CommunityPage";
 import ProfilePage from "./pages/ProfilePage"; 
 import TournamentPage from "./pages/TournamentPage"; 
 import MyGardenPage from "./pages/MyGardenPage";
+import AboutPage from "./pages/AboutPage"; 
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/profile" element={<ProfilePage />} /> 
         <Route path="/tournament" element={<TournamentPage />} /> 
         <Route path="/mygarden" element={<MyGardenPage />} /> 
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );

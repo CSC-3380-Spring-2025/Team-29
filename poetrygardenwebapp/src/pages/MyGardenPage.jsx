@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { db,auth, addGarden, fetchGardens } from '../firebase';
+import { auth, addGarden, fetchGardens } from '../firebase';
 import { onAuthStateChanged,signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ const MyGardenPage = () => {
   const [user, setUser] = useState(null);
   const [selectedPoem, setSelectedPoem] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -117,12 +117,13 @@ const MyGardenPage = () => {
     try {
       await signOut(auth);
       setUser(null); // optional: clear local user state
+      navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
     }
   };
   
-const navigate = useNavigate();
+
   return (
     <div>
       <nav className="navbar">
@@ -143,7 +144,7 @@ const navigate = useNavigate();
         className="logout-button"
         onClick={async () => {
           await handleLogout();
-          navigate("/");
+          
         }}
     >
       Logout
