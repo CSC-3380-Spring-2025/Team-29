@@ -1,130 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { auth, fetchGardens, addGarden } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import CommunityChat from '../components/CommunityChat';
 import '../styles/tournamentpage.css';
-
-// Subcomponents for each section
-const Leaderboard = ({ entries }) => {
-  // Sort entries by votes (descending) and display top performers
-  const sorted = [...entries].sort((a, b) => b.votes - a.votes);
-  return (
-    <div>
-      {sorted.map((entry, idx) => (
-        <div key={entry.id} className="leaderboard-row">
-          <span className="rank">#{idx + 1}</span>
-          <span className="title">{entry.title}</span>
-          <span className="votes">{entry.votes} votes</span>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const PreviousWinners = ({ entries }) => {
-  // Filter entries marked as past winners
-  const winners = entries.filter(e => e.status === 'winner');
-  return (
-    <div>
-      {winners.map(entry => (
-        <div key={entry.id} className="winner-card">
-          <h3>{entry.title}</h3>
-          <p><em>by {entry.userEmail}</em></p>
-          <p>{entry.content}</p>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const SubmitEntry = ({ user, onSubmit }) => {
-  const [entry, setEntry] = useState({ title: '', content: '', isOldPoem: false });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setEntry(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSubmit = () => {
-    if (!entry.title || !entry.content) return;
-    onSubmit({
-      ...entry,
-      userEmail: user.email,
-      votes: 0,
-      status: 'submitted',
-      timestamp: Date.now()
-    });
-    setEntry({ title: '', content: '', isOldPoem: false });
-  };
-// 
-  return (
-    <div className="submit-form">
-      <input
-        name="title"
-        placeholder="Poem Title"
-        value={entry.title}
-        onChange={handleChange}
-      />
-      <textarea
-        name="content"
-        placeholder="Write or paste your poem here"
-        value={entry.content}
-        onChange={handleChange}
-      />
-      <label>
-        <input
-          type="checkbox"
-          name="isOldPoem"
-          checked={entry.isOldPoem}
-          onChange={handleChange}
-        />
-        This is an old poem
-      </label>
-      <button onClick={handleSubmit}>Submit Poem</button>
-    </div>
-  );
-};
+import '../components/CommunityChat.css';
 
 export default function TournamentPage() {
   const [user, setUser] = useState(null);
   const [entries, setEntries] = useState([]);
   const [tab, setTab] = useState('leaderboard');
 
-  // Listen to auth state changes
+  // Subscribe to auth state
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
-    return unsubscribe;
+    const unsub = onAuthStateChanged(auth, u => setUser(u));
+    return unsub;
   }, []);
 
-  // Load tournament entries from the same gardens collection
+  // Load entries from the shared gardens collection
   useEffect(() => {
     const load = async () => {
       try {
         const data = await fetchGardens();
         setEntries(data);
       } catch (err) {
-        console.error('Error fetching tournament entries:', err);
+        console.error('Failed to load entries', err);
       }
     };
     load();
   }, []);
 
-  // Handler for new submissions: reuse addGarden
-  const handleNewEntry = async (entry) => {
+  // Handle new poem submissions
+  const handleSubmit = async (poem) => {
     try {
-      await addGarden(entry);
-      const data = await fetchGardens();
-      setEntries(data);
+      await addGarden({
+        ...poem,
+        userEmail: user.email,
+        votes: 0,
+        status: 'submitted',
+        timestamp: Date.now()
+      });
+      const updated = await fetchGardens();
+      setEntries(updated);
       setTab('leaderboard');
     } catch (err) {
-      console.error('Error submitting entry:', err);
+      console.error('Submit failed', err);
     }
   };
 
+  // Prepare posts for CommunityChat: map entries to {author, time, title, snippet}
+  const posts = entries
+    .filter(e => tab !== 'previous' || e.status === 'winner')
+    .filter(e => tab !== 'submit')
+    .map(e => ({
+      author: e.userEmail,
+      time: new Date(e.timestamp).toLocaleString(),
+      title: e.title,
+      snippet: e.content.slice(0, 120) + (e.content.length > 120 ? '…' : '')
+    }));
+
   return (
-    <div className="tournament-page">
+    <>
+      {/* Persistent Navbar */}
       <nav className="navbar">
         <h2 className="navbar-title">Poetry Garden Tournament</h2>
         <div className="navbar-links">
@@ -137,30 +73,88 @@ export default function TournamentPage() {
         </div>
       </nav>
 
-      <div className="tournament-tabs">
-        <button
-          className={tab === 'leaderboard' ? 'active' : ''}
-          onClick={() => setTab('leaderboard')}
-        >Leaderboard</button>
-        <button
-          className={tab === 'previous' ? 'active' : ''}
-          onClick={() => setTab('previous')}
-        >Previous Winners</button>
-        <button
-          className={tab === 'submit' ? 'active' : ''}
-          onClick={() => setTab('submit')}
-        >Submit Poem</button>
-      </div>
+      <div className="page-padding">
+        {/* Tabs controlling Chat Card content */}
+        <div className="tournament-tabs">
+          <button
+            className={tab === 'leaderboard' ? 'active' : ''}
+            onClick={() => setTab('leaderboard')}
+          >Leaderboard</button>
+          <button
+            className={tab === 'previous' ? 'active' : ''}
+            onClick={() => setTab('previous')}
+          >Previous Winners</button>
+          <button
+            className={tab === 'submit' ? 'active' : ''}
+            onClick={() => setTab('submit')}
+          >Submit Poem</button>
+        </div>
 
-      <div className="tournament-content">
-        {tab === 'leaderboard' && <Leaderboard entries={entries} />}
-        {tab === 'previous' && <PreviousWinners entries={entries} />}
-        {tab === 'submit' && user && (
-          <SubmitEntry user={user} onSubmit={handleNewEntry} />
-        )}
-        {tab === 'submit' && !user && (
-          <p>Please log in to submit a poem.</p>
-        )}
+        {/* Chat-card layout reused from CommunityChat */}
+        <div className="chat-card">
+          <div className="chat-header">
+            <h2>
+              {tab === 'leaderboard' && 'Current Leaderboard'}
+              {tab === 'previous' && 'Previous Winners'}
+              {tab === 'submit' && 'Submit Your Poem'}
+            </h2>
+          </div>
+
+          {/* Leaderboard & Previous winners as chat threads */}
+          {(tab === 'leaderboard' || tab === 'previous') && (
+            <CommunityChat posts={posts} />
+          )}
+
+          {/* Submission form styled inside chat-card */}
+          {tab === 'submit' && (
+            <div className="submit-form">
+              {!user && <p>Please log in to submit a poem.</p>}
+              {user && (
+                <SubmitEntry user={user} onSubmit={handleSubmit} />
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// Inline SubmitEntry component using chat-input styles
+function SubmitEntry({ user, onSubmit }) {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isOldPoem, setIsOldPoem] = useState(false);
+
+  return (
+    <div style={{ padding: '16px' }}>
+      <input
+        type="text"
+        placeholder="Poem Title"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+      />
+      <textarea
+        placeholder="Write or paste your poem here"
+        value={content}
+        onChange={e => setContent(e.target.value)}
+      />
+      <label>
+        <input
+          type="checkbox"
+          checked={isOldPoem}
+          onChange={e => setIsOldPoem(e.target.checked)}
+        /> This is an old poem
+      </label>
+      <div className="chat-input" style={{ marginTop: '12px' }}>
+        <input
+          type="text"
+          readOnly
+          value={user.email}
+        />
+        <button onClick={() => onSubmit({ title, content, isOldPoem })}>
+          Post Poem
+        </button>
       </div>
     </div>
   );
