@@ -35,7 +35,7 @@ const AboutPage = () => {
           <img src={Poetrygardenlogo} alt="Logo" className="logo" />
         </div>
         <div className="navbar-links">
-          <a href="/">Home</a>
+          
           <a href="/communitypage">Community</a>
           <a href="/tournament">Tournament</a>
           <a href="/mygarden">My Garden</a>

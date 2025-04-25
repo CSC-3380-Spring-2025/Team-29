@@ -28,7 +28,7 @@ const ProfilePage = () => {
     try {
       await signOut(auth); // Log out the user
       setUser(null); // Clear the user state
-      navigate("/"); // Redirect to the home page
+      navigate("/"); 
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -64,7 +64,6 @@ const ProfilePage = () => {
           <img src={Poetrygardenlogo} alt="Logo" className="logo" />
         </div>
         <div className="navbar-links">
-          <a href="/">Home</a>
           <a href="/communitypage">Community</a>
           <a href="/tournament">Tournament</a>
           <a href="/mygarden">My Garden</a>
