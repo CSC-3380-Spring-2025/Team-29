@@ -49,6 +49,15 @@
     margin-left: 1rem;
     font-style: italic;
     color: #4A4A4A;
+    cursor: pointer; /* Add this to make the cursor a pointer */
+   /* Optional: Make it look like a link */
+    
+  }
+  
+  .user-email:hover {
+    color: #689F38; /* Optional: Change color on hover */
+    font-weight: bold;
+    text-decoration: underline; 
   }
   
   /* Poem Flower Grid */

@@ -139,7 +139,9 @@ const MyGardenPage = () => {
           <a href="/about">About</a>
           {user && (
   <div className="user-info">
-    <span className="user-email">{user.email}</span>
+    <span className="user-email"onClick={() => navigate("/profile")} 
+   
+   >{user.email}</span>
     
       <button
         className="logout-button"
