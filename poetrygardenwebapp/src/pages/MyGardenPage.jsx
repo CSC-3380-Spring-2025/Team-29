@@ -20,7 +20,7 @@ import Poetrygardenlogo from '../images/Poetrygardenlogo.png';
 
 const MyGardenPage = () => {
 
-  const [newPoem, setNewPoem] = useState({ title: '', content: '', theme: '' });
+  const [newPoem, setNewPoem] = useState({ title: '', content: '', theme: '',date: '' });
   const [poems, setPoems] = useState([]);
   const [garden, setGarden] = useState([]);
   const [user, setUser] = useState(null);
@@ -71,6 +71,7 @@ const MyGardenPage = () => {
       placeholder,
       published: true,
       userEmail: user?.email || "Anonymous",
+      date: new Date().toLocaleDateString(),
     };
 
     try {
@@ -251,6 +252,7 @@ const MyGardenPage = () => {
                     onClick={() => handleFlowerClick(poem)}
                   />
                   <span className="tooltip">{poem.title}</span>
+                  
                 </div>
               ))}
           </div>
@@ -262,6 +264,7 @@ const MyGardenPage = () => {
               <h2>{selectedPoem.title}</h2>
               <p><strong>Poem:</strong> {selectedPoem.content}</p>
               <p><strong>Theme:</strong> {selectedPoem.theme}</p>
+              <p><strong>Date:</strong> {selectedPoem.date}</p>
               <button onClick={closeModal}>Close</button>
             </div>
           </div>

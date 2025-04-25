@@ -1,10 +1,9 @@
-import Poetrygardenlogo from '../images/Poetrygardenlogo.png';
-import React, { useState, useEffect } from 'react';
-import { auth, addGarden, fetchGardens } from '../firebase';
-import { onAuthStateChanged,signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import '../styles/profilepage.css'; 
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import "../styles/profilepage.css";
+import Poetrygardenlogo from "../images/Poetrygardenlogo.png";
 
 const ProfilePage = () => {
   const [username, setUsername] = useState("Username");
@@ -27,24 +26,26 @@ const ProfilePage = () => {
   const [tempNickname, setTempNickname] = useState(nickname);
 
   const isUsernameValid = /^[^\s]{4,17}$/.test(tempUsername);
-const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          setUser(user);
-        });
-        return () => unsubscribe();
-      }, []);
-      const handleLogout = async () => {
-          try {
-            await signOut(auth);
-            setUser(null); // optional: clear local user state
-            navigate("/");
-          } catch (err) {
-            console.error("Logout failed:", err);
-          }
-        };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      navigate("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   const handleSave = () => {
     if (!isUsernameValid) return;
     setUsername(tempUsername);
@@ -55,7 +56,6 @@ const [user, setUser] = useState(null);
     setLanguage(tempLanguage);
     setNickname(tempNickname);
     setEditing(false);
-    setShowCard(false);
   };
 
   const handleCancel = () => {
@@ -89,35 +89,21 @@ const [user, setUser] = useState(null);
           <a href="/mygarden">My Garden</a>
           <a href="/about">About</a>
           {user && (
-  <div className="user-info">
-    <span className="user-email">{user.email}</span>
-    
-      <button
-        className="logout-button"
-        onClick={async () => {
-          await handleLogout();
-          
-        }}
-    >
-      Logout
-    </button>
-    
-  </div>
-)}
-
-
+            <div className="user-info">
+              <span className="user-email">{user.email}</span>
+              <button
+                className="logout-button"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </nav>
-      
-    <AnimatePresence>
+
       {showCard && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          className="max-w-2xl mx-auto bg-gradient-to-br from-white to-gray-100 shadow-2xl rounded-2xl p-8 space-y-6 border border-gray-200"
-        >
+        <div className="max-w-2xl mx-auto bg-gradient-to-br from-white to-gray-100 shadow-2xl rounded-2xl p-8 space-y-6 border border-gray-200">
           {/* Profile Icon */}
           <div className="flex flex-col items-center">
             {pfp ? (
@@ -242,9 +228,8 @@ const [user, setUser] = useState(null);
               </button>
             </div>
           )}
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
     </div>
   );
 };

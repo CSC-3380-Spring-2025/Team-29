@@ -93,6 +93,7 @@
     padding: 2rem;
   }
   
+  
   .garden-container {
     background-color: #8B5A2B; 
     display: flex;
@@ -232,7 +233,9 @@
     border: 2px solid #aaa;
     border-radius: 10px;
     padding: 1rem;
-    background-color: #6A3E2E;
+    background-image: url('../images/dirt.png');
+  background-repeat: repeat;
+  background-size: 40px 40px;
     margin-top: 1rem;
   }
   
@@ -313,6 +316,11 @@
   .logout-button:hover {
     background-color: #d32f2f;
   }
-  
+  .poem-date {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
   
   

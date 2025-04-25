@@ -1,10 +1,9 @@
+
 .page-padding {
-    padding: 2rem;
-    max-width: 800px;
-    margin: auto;
-  }
   
-  
+  padding: 2rem;
+}
+
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -159,5 +158,3 @@
     transition: none; /* Disable any animations or transitions */
     animation: none; /* Ensure no animations are applied */
   }
-  
-
