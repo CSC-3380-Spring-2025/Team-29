@@ -1,8 +1,8 @@
 .profile-container {
-  max-width: 400px; /* Adjust width for expansion */
+  max-width: 600px; /* Adjust width for expansion */
   margin: 2rem auto; /* Center the card */
   padding: 2rem; /* Add padding inside the card */
-  background: linear-gradient(#E6BDBD, #BFD8C2); /* Gradient background */
+  background: #BFD8C2; /* background */
   border-radius: 1rem; /* Rounded corners */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
   border: 1px solid #bbf7d0; /* Light border */
