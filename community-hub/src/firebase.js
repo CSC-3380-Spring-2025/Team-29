@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA8a1fYSagmKb41CjTSI5PuwsMthN0Om_o",
+  apiKey: "",
   authDomain: "poetrygardenfirebase.firebaseapp.com",
   projectId: "poetrygardenfirebase",
   storageBucket: "poetrygardenfirebase.firebasestorage.app",

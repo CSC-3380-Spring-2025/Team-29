@@ -1,0 +1,122 @@
+/* src/components/StatsShop.css */
+
+.stats-shop-card {
+    background: #1a1a1a;
+    border: 2px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.8);
+    color: #e0e0e0;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  
+  .stats-shop-header {
+    background: #111;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .stats-shop-header h2 {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .stat {
+    background: #222;
+    border: 1px solid #333;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  
+  .stat-value {
+    font-size: 1.75rem;
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .shop-section {
+    background: #1a1a1a;
+    padding: 16px;
+  }
+  
+  .shop-title {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  
+  .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  
+  .shop-item {
+    background: #222;
+    border: 1px solid #333;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .shop-item-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+  
+  .shop-item-name {
+    font-size: 0.875rem;
+    color: #ddd;
+    margin-bottom: 4px;
+  }
+  
+  .shop-item-price {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #aaa;
+    margin-bottom: 8px;
+  }
+  
+  .shop-item-price .currency {
+    margin-left: 4px;
+  }
+  
+  .shop-button {
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    color: #fff;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .shop-button:hover {
+    opacity: 0.8;
+  }
+  

@@ -1,0 +1,83 @@
+/* src/components/Leaderboard.css */
+.leaderboard-card {
+    background: #1e1e2f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  
+  .leaderboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+  }
+  
+  .leaderboard-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .filter-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  
+  .leaderboard-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .leaderboard-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 2fr 60px;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.2s;
+  }
+  
+  .leaderboard-item:hover {
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .position {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    border: 2px solid #4f46e5;
+  }
+  
+  .username {
+    font-weight: 600;
+  }
+  
+  .poem-title {
+    color: #d1d5db;
+    font-size: 0.9rem;
+  }
+  
+  .score {
+    font-weight: 700;
+    text-align: right;
+  }
+  
