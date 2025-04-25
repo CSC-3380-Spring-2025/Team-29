@@ -58,7 +58,7 @@ const SubmitEntry = ({ user, onSubmit }) => {
     });
     setEntry({ title: '', content: '', isOldPoem: false });
   };
-
+// 
   return (
     <div className="submit-form">
       <input
