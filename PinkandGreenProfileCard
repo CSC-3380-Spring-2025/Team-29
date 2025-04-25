@@ -1,4 +1,4 @@
-// Enhanced ProfileCard.jsx with visual improvements and garden theme
+// Enhanced ProfileCard.jsx pink and green theme
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
