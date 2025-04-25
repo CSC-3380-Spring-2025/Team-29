@@ -1,6 +1,6 @@
 
 .page-padding {
-  
+  color:#4D6A5C;
   padding: 2rem;
 }
 
@@ -158,3 +158,4 @@
     transition: none; /* Disable any animations or transitions */
     animation: none; /* Ensure no animations are applied */
   }
+ 
