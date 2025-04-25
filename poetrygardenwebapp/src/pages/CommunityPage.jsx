@@ -126,6 +126,7 @@ const CommunityPage = () => {
   
 
   return (
+    <div className="community-page">
     <div>
       <nav className="navbar">
         <div className="navbar-logo">
@@ -267,7 +268,9 @@ const CommunityPage = () => {
         )}
       </div>
     </div>
+    </div>
   );
 };
+
 
 export default CommunityPage;
