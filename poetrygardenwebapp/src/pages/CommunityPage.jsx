@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { auth, addGarden, fetchGardens } from '../firebase';
 import { onAuthStateChanged,signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 import '../styles/communitypage.css';
 import Flower1 from '../images/Flower1.png';
@@ -140,18 +139,17 @@ const CommunityPage = () => {
           <a href="/about">About</a>
           {user && (
   <div className="user-info">
-    <span className="user-email">{user.email}</span>
-    
-      <button
-        className="logout-button"
-        onClick={async () => {
-          await handleLogout();
-          
-        }}
+    <Link to="/profile" className="user-email">
+      {user.email}
+    </Link>
+    <button
+      className="logout-button"
+      onClick={async () => {
+        await handleLogout();
+      }}
     >
       Logout
     </button>
-    
   </div>
 )}
 
