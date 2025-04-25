@@ -3,70 +3,35 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import "../styles/profilepage.css";
-import Poetrygardenlogo from "../images/Poetrygardenlogo.png";
+import Poetrygardenlogo from "../images/Poetrygardenlogo.png"; // Import the logo
 
 const ProfilePage = () => {
-  const [username, setUsername] = useState("Username");
-  const [bio, setBio] = useState("Tell us about yourself");
-  const [email, setEmail] = useState("your@email.com");
-  const [location, setLocation] = useState("City, Country");
-  const [interests, setInterests] = useState("etc. Coding, Gaming");
-  const [language, setLanguage] = useState("English");
-  const [nickname, setNickname] = useState("Choose a funky nickname");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [interests, setInterests] = useState("");
+  const [language, setLanguage] = useState("");
+  const [nickname, setNickname] = useState("");
   const [pfp, setPfp] = useState(null);
   const [editing, setEditing] = useState(false);
-  const [showCard, setShowCard] = useState(true);
-
-  const [tempUsername, setTempUsername] = useState(username);
-  const [tempBio, setTempBio] = useState(bio);
-  const [tempEmail, setTempEmail] = useState(email);
-  const [tempLocation, setTempLocation] = useState(location);
-  const [tempInterests, setTempInterests] = useState(interests);
-  const [tempLanguage, setTempLanguage] = useState(language);
-  const [tempNickname, setTempNickname] = useState(nickname);
-
-  const isUsernameValid = /^[^\s]{4,17}$/.test(tempUsername);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Define user state
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
-    return () => unsubscribe();
+    return () => unsubscribe(); // Cleanup subscription on unmount
   }, []);
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      setUser(null);
-      navigate("/");
+      await signOut(auth); // Log out the user
+      setUser(null); // Clear the user state
+      navigate("/"); // Redirect to the home page
     } catch (err) {
       console.error("Logout failed:", err);
     }
-  };
-
-  const handleSave = () => {
-    if (!isUsernameValid) return;
-    setUsername(tempUsername);
-    setBio(tempBio);
-    setEmail(tempEmail);
-    setLocation(tempLocation);
-    setInterests(tempInterests);
-    setLanguage(tempLanguage);
-    setNickname(tempNickname);
-    setEditing(false);
-  };
-
-  const handleCancel = () => {
-    setTempUsername(username);
-    setTempBio(bio);
-    setTempEmail(email);
-    setTempLocation(location);
-    setTempInterests(interests);
-    setTempLanguage(language);
-    setTempNickname(nickname);
-    setEditing(false);
   };
 
   const handleFileChange = (e) => {
@@ -74,6 +39,22 @@ const ProfilePage = () => {
     if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
       setPfp(URL.createObjectURL(file));
     }
+  };
+
+  const profileFields = [
+    { label: "Bio", value: bio, setValue: setBio },
+    { label: "Location", value: location, setValue: setLocation },
+    { label: "Interests", value: interests, setValue: setInterests },
+    { label: "Language", value: language, setValue: setLanguage },
+    { label: "Nickname", value: nickname, setValue: setNickname },
+  ];
+
+  const handleSave = () => {
+    setEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditing(false);
   };
 
   return (
@@ -90,7 +71,12 @@ const ProfilePage = () => {
           <a href="/about">About</a>
           {user && (
             <div className="user-info">
-              <span className="user-email">{user.email}</span>
+              <span
+                className="user-email"
+                onClick={() => navigate("/profile")}
+              >
+                {user.email}
+              </span>
               <button
                 className="logout-button"
                 onClick={handleLogout}
@@ -101,135 +87,81 @@ const ProfilePage = () => {
           )}
         </div>
       </nav>
+      <div className="profile-container">
+        <div className="profile-title">
+          <span className="user-email">
+            {user ? user.email : "Guest"} {/* Show "Guest" if user is null */}
+          </span>
+        </div>
 
-      {showCard && (
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-white to-gray-100 shadow-2xl rounded-2xl p-8 space-y-6 border border-gray-200">
-          {/* Profile Icon */}
-          <div className="flex flex-col items-center">
-            {pfp ? (
-              <img
-                src={pfp}
-                alt="Profile"
-                className="w-28 h-28 rounded-full object-cover border-4 border-blue-300 shadow-md"
-              />
-            ) : (
-              <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-gray-600 to-gray-800 border-4 border-blue-300 shadow-md" />
-            )}
-
-            {editing && (
-              <input
-                type="file"
-                accept=".png,.jpeg,.jpg"
-                onChange={handleFileChange}
-                className="mt-2 text-sm"
-              />
-            )}
-
-            {editing ? (
-              <input
-                type="text"
-                value={tempUsername}
-                onChange={(e) => setTempUsername(e.target.value)}
-                className="mt-4 w-full text-center text-2xl font-semibold p-2 border border-blue-300 rounded-md shadow-sm"
-                placeholder="Username"
-              />
-            ) : (
-              <h2 className="text-2xl font-bold mt-4 text-blue-700">{username}</h2>
-            )}
-
-            {!editing && (
-              <button
-                onClick={() => setEditing(true)}
-                className="mt-2 text-sm text-blue-500 hover:underline"
-              >
-                Edit Profile
-              </button>
-            )}
-          </div>
-
-          {/* Additional Info Sections */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[{
-              label: "Bio",
-              value: bio,
-              temp: tempBio,
-              setTemp: setTempBio,
-              type: "textarea"
-            }, {
-              label: "Email",
-              value: email,
-              temp: tempEmail,
-              setTemp: setTempEmail
-            }, {
-              label: "Location",
-              value: location,
-              temp: tempLocation,
-              setTemp: setTempLocation
-            }, {
-              label: "Interests",
-              value: interests,
-              temp: tempInterests,
-              setTemp: setTempInterests
-            }, {
-              label: "Language",
-              value: language,
-              temp: tempLanguage,
-              setTemp: setTempLanguage
-            }, {
-              label: "Nickname",
-              value: nickname,
-              temp: tempNickname,
-              setTemp: setTempNickname
-            }].map(({ label, value, temp, setTemp, type }) => (
-              <div key={label}>
-                <h3 className="font-semibold text-gray-700 mb-1">{label}:</h3>
-                {editing ? (
-                  type === "textarea" ? (
-                    <textarea
-                      className="w-full p-2 border rounded-md text-sm shadow-sm"
-                      value={temp}
-                      onChange={(e) => setTemp(e.target.value)}
-                    />
-                  ) : (
-                    <input
-                      className="w-full p-2 border rounded-md text-sm shadow-sm"
-                      value={temp}
-                      onChange={(e) => setTemp(e.target.value)}
-                    />
-                  )
-                ) : (
-                  <p className="text-gray-600 text-sm bg-white px-2 py-1 rounded shadow-inner">{value}</p>
-                )}
-              </div>
-            ))}
-          </div>
-
+        <div className="profile-picture">
+          {pfp ? (
+            <img
+              src={pfp}
+              alt="User profile"
+              className="profile-picture"
+            />
+          ) : (
+            <div className="placeholder-pfp">?</div>
+          )}
           {editing && (
-            <div className="flex justify-end space-x-2 pt-4">
-              {!isUsernameValid && (
-                <p className="text-red-500 text-xs absolute bottom-4 left-4">
-                  Username must be 4–17 characters with no spaces.
-                </p>
-              )}
-              <button
-                onClick={handleCancel}
-                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={!isUsernameValid}
-                className={`px-4 py-2 rounded-md text-white text-sm ${
-                  isUsernameValid ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300 cursor-not-allowed"
-                }`}
-              >
-                Save & Close
-              </button>
-            </div>
+            <input
+              type="file"
+              accept=".png,.jpeg,.jpg"
+              onChange={handleFileChange}
+              className="edit-button"
+            />
           )}
         </div>
-      )}
+
+        {!editing && (
+          <h2 className="text-center text-green-700 font-bold mt-4">
+            {username}
+          </h2>
+        )}
+        {!editing && (
+          <button
+            onClick={() => setEditing(true)}
+            className="toggle-button"
+          >
+            {editing ? "-" : "+"}
+          </button>
+        )}
+
+        <div className="profile-fields">
+          {profileFields.map(({ label, value, setValue }) => (
+            <div key={label} className="profile-field">
+              <label>{label}:</label>
+              {editing ? (
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              ) : (
+                <p>{value}</p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {editing && (
+          <div className="button-group">
+            <button
+              onClick={handleCancel}
+              className="button-cancel"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="button-save"
+            >
+              Save
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
