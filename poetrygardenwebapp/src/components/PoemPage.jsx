@@ -4,7 +4,7 @@ import PoemForm from "../components/PoemForm";
 import HandlePoemSubmit from "../Utilities/HandlePoemSubmit";
 import PoemLogic from "../components/PoemLogic";
 import getFlowerImage from "../Utilities/GetFlowerImage";
-import {signOut} from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
 const PoemPage = ({ title, filterPoems }) => {
@@ -24,19 +24,39 @@ const PoemPage = ({ title, filterPoems }) => {
     navigate,
   } = PoemLogic();
 
+  // Handle input changes for the poem form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewPoem((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle poem submission
+  const handlePoemSubmit = async () => {
+    try {
+      await HandlePoemSubmit({
+        newPoem,
+        user,
+        setPoems,
+        setGarden,
+        setShowForm,
+        setNewPoem,
+      });
+    } catch (err) {
+      console.error("Failed to submit poem:", err);
+    }
+  };
+
+  // Handle flower click to open modal
   const handleFlowerClick = (poem) => {
     setSelectedPoem(poem);
   };
 
+  // Close the modal
   const closeModal = () => {
     setSelectedPoem(null);
   };
 
+  // Handle user logout
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -68,16 +88,7 @@ const PoemPage = ({ title, filterPoems }) => {
             <PoemForm
               newPoem={newPoem}
               handleInputChange={handleInputChange}
-              handlePoemSubmit={(poemData) =>
-                HandlePoemSubmit({
-                  ...poemData,
-                  user,
-                  setPoems,
-                  setGarden,
-                  setShowForm,
-                  setNewPoem,
-                })
-              }
+              handlePoemSubmit={handlePoemSubmit} // Use the centralized handlePoemSubmit
               getFlowerImage={getFlowerImage}
             />
           )}
