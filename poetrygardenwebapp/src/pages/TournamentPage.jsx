@@ -1,200 +1,335 @@
 import React, { useState, useEffect } from 'react';
-import { auth, fetchGardens, addGarden } from '../firebase';
+import { auth, fetchGardens, addGarden, voteGarden } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import CommunityChat from '../pages/CommunityChat';
+import CommunityChat from './CommunityChat';
 import '../styles/tournamentpage.css';
-import '../styles/communitychat.css';
-import Poetrygardenlogo from '../images/Poetrygardenlogo.png';
+import '../styles/communitypage.css';  // for the grid & modal styles
+
+// import all 12 flower images
+import Flower1  from '../images/Flower1.png';
+import Flower2  from '../images/Flower2.png';
+import Flower3  from '../images/Flower3.png';
+import Flower4  from '../images/Flower4.png';
+import Flower5  from '../images/Flower5.png';
+import Flower6  from '../images/Flower6.png';
+import Flower7  from '../images/Flower7.png';
+import Flower8  from '../images/Flower8.png';
+import Flower9  from '../images/Flower9.png';
+import Flower10 from '../images/Flower10.png';
+import Flower11 from '../images/Flower11.png';
+import Flower12 from '../images/Flower12.png';
+
+// array for numeric placeholders
+const flowerImages = [
+  Flower1, Flower2, Flower3, Flower4, Flower5, Flower6,
+  Flower7, Flower8, Flower9, Flower10, Flower11, Flower12,
+];
+
+// map for string‐based placeholders (CommunityPage uses filenames)
+const flowerMap = {
+  'Flower1.png':  Flower1,
+  'Flower2.png':  Flower2,
+  'Flower3.png':  Flower3,
+  'Flower4.png':  Flower4,
+  'Flower5.png':  Flower5,
+  'Flower6.png':  Flower6,
+  'Flower7.png':  Flower7,
+  'Flower8.png':  Flower8,
+  'Flower9.png':  Flower9,
+  'Flower10.png': Flower10,
+  'Flower11.png': Flower11,
+  'Flower12.png': Flower12,
+};
+
+// helper to pick the right image
+function getFlowerSrc(placeholder) {
+  if (typeof placeholder === 'number') {
+    return flowerImages[placeholder % flowerImages.length];
+  }
+  if (typeof placeholder === 'string' && flowerMap[placeholder]) {
+    return flowerMap[placeholder];
+  }
+  // fallback to first flower
+  return flowerImages[0];
+}
 
 export default function TournamentPage() {
-  const [user, setUser] = useState(null);
-  const [entries, setEntries] = useState([]);
-  const [tab, setTab] = useState('leaderboard');
+  const [user, setUser]         = useState(null);
+  const [entries, setEntries]   = useState([]);
+  const [randomPrev, setRandomPrev] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [showComments, setShowComments] = useState(false);
+  const [tab, setTab]           = useState('leaderboard');
   const navigate = useNavigate();
 
-  // Subscribe to auth state
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
+
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => setUser(u));
-    return unsub;
+    (async () => {
+      const data = await fetchGardens();
+      const normalized = data.map(e => ({
+        ...e,
+        votes: typeof e.votes === 'number' ? e.votes : 0
+      }));
+      setEntries(normalized);
+    })();
   }, []);
-
-  // Load entries from the shared gardens collection
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const data = await fetchGardens();
-        setEntries(data);
-      } catch (err) {
-        console.error('Failed to load entries', err);
-      }
-    };
-    load();
-  }, []);
-
-  // Handle logout
-  const handleLogout = async () => {
-      try {
-        await signOut(auth);
-        setUser(null); // optional: clear local user state
-        navigate("/");
-      } catch (err) {
-        console.error("Logout failed:", err);
-      }
-    };
-
-  // Handle new poem submissions
+// Whenever we flip to “previous,” pick one at random
+ useEffect(() => {
+     if (tab === 'previous' && entries.length) {
+       const pick = entries[Math.floor(Math.random() * entries.length)];
+      setRandomPrev(pick);
+    }
+   }, [tab, entries]);
   const handleSubmit = async (poem) => {
-    if (!poem.title.trim() || !poem.content.trim()) {
-      alert('Please provide a title and content for your poem.');
-      return;
-    }
-    try {
-      await addGarden({
-        ...poem,
-        userEmail: user.email,
-        votes: 0,
-        status: 'submitted',
-        timestamp: Date.now(),
-      });
-      const updated = await fetchGardens();
-      setEntries(updated);
-      setTab('leaderboard');
-    } catch (err) {
-      console.error('Submit failed', err);
-    }
+    // pick random numeric index
+    const idx = Math.floor(Math.random() * flowerImages.length);
+    await addGarden({
+      ...poem,
+      userEmail: user.email,
+      votes: 0,
+      status: 'submitted',
+      timestamp: Date.now(),
+      placeholder: idx, 
+    });
+    setEntries(await fetchGardens());
+    setTab('leaderboard');
   };
 
-  // Prepare posts for CommunityChat
-  const posts = entries
-    .filter((e) => tab !== 'previous' || e.status === 'winner')
-    .map((e) => ({
-      author: e.userEmail,
-      time: new Date(e.timestamp).toLocaleString(),
-      title: e.title,
-      snippet: e.content.slice(0, 120) + (e.content.length > 120 ? '…' : ''),
-    }));
+  const handleVote = async (id) => {
+    if (!user) return alert('Please log in to vote.');
+      // **bump locally first** for instant feedback
+   setEntries((es) =>
+       es.map((e) => e.id === id ? { ...e, votes: e.votes + 1 } : e)
+     );
+     if (selected && selected.id === id) {
+       setSelected({ ...selected, votes: selected.votes + 1 });
+     }
+  
+    await voteGarden(id);
+    setEntries(await fetchGardens());
+  };
+
+  const winner      = entries.find((e) => e.status === 'winner');
+  const contestants = entries.filter((e) => e.status !== 'winner');
 
   return (
-    <>
-      <div>
-        <nav className="navbar">
-          <div className="navbar-logo">
-            <img src={Poetrygardenlogo} alt="Logo" className="logo" />
-          </div>
-          <div className="navbar-links">
-           
-            <a href="/communitypage">Community</a>
-            <a href="/tournament">Tournament</a>
-            <a href="/mygarden">My Garden</a>
-            <a href="/about">About</a>
-            {user && (
-              <div className="user-info">
-                <span
-                  className="user-email"
-                  onClick={() => navigate('/profile')}
-                >
-                  {user.email}
-                </span>
-                <button
-                className="logout-button"
-                onClick={handleLogout}
-              >
+    <div className="community-page">
+      <nav className="navbar">
+        <div className="navbar-logo">
+          <a href="/"><img src={require('../images/Poetrygardenlogo.png')} alt="Logo" className="logo"/></a>
+        </div>
+        <div className="navbar-links">
+          <a href="/communitypage">Community</a>
+          <a href="/tournament">Tournament</a>
+          <a href="/mygarden">My Garden</a>
+          <a href="/about">About</a>
+          {user && (
+            <div className="user-info">
+              <span onClick={() => navigate('/profile')} className="user-email">
+                {user.email}
+              </span>
+              <button className="logout-button" onClick={() => signOut(auth)}>
                 Logout
               </button>
-              </div>
-            )}
-          </div>
-        </nav>
-
-        <div className="page-padding">
-          <div className="tournament-tabs">
-            <button
-              className={tab === 'leaderboard' ? 'active' : ''}
-              onClick={() => setTab('leaderboard')}
-            >
-              Leaderboard
-            </button>
-            <button
-              className={tab === 'previous' ? 'active' : ''}
-              onClick={() => setTab('previous')}
-            >
-              Previous Winners
-            </button>
-            <button
-              className={tab === 'submit' ? 'active' : ''}
-              onClick={() => setTab('submit')}
-            >
-              Submit Poem
-            </button>
-          </div>
-
-          <div className="chat-card">
-            <div className="chat-header">
-              <h2>
-                {tab === 'leaderboard' && 'Current Leaderboard'}
-                {tab === 'previous' && 'Previous Winners'}
-                {tab === 'submit' && 'Submit Your Poem'}
-              </h2>
             </div>
+          )}
+        </div>
+      </nav>
 
-            {(tab === 'leaderboard' || tab === 'previous') && posts.length > 0 ? (
-              <CommunityChat posts={posts} />
-            ) : (
-              <p>No entries available.</p>
-            )}
+      <div className="page-padding">
+        {/* Poem of the Week with its flower */}
+        {winner && (
+          <section className="poem-of-week">
+            <h2>🏆 Poem of the Week</h2>
+            <div className="poem-card spotlight">
+              <img
+                src={getFlowerSrc(winner.placeholder)}
+                alt="Winner flower"
+                className="spotlight-flower"
+              />
+              <h3>{winner.title}</h3>
+              <p className="full-content">{winner.content}</p>
+              <div className="meta">
+                <span>{winner.userEmail}</span>
+                <span>{winner.votes} votes</span>
+              </div>
+            </div>
+          </section>
+        )}
 
-            {tab === 'submit' && (
-              <div className="submit-form">
-                {!user && <p>Please log in to submit a poem.</p>}
-                {user && <SubmitEntry user={user} onSubmit={handleSubmit} />}
+        {/* Tabs */}
+        <div className="tournament-tabs">
+          {['leaderboard','previous','submit'].map((t) => (
+            <button
+              key={t}
+              className={tab === t ? 'active' : ''}
+              onClick={() => setTab(t)}
+            >
+              {t === 'leaderboard'
+                ? 'Leaderboard'
+                : t === 'previous'
+                ? 'Previous Winners'
+                : 'Submit Poem'}
+            </button>
+          ))}
+        </div>
+
+        {/* Flower grid */}
+        {(tab === 'leaderboard' || tab === 'previous') && (
+          <div className="poem-flower-grid">
+            {contestants
+              .filter(e => tab !== 'previous' || e.status === 'winner')
+              .map((e) => (
+                <div
+                  key={e.id}
+                  className="flower-wrapper"
+                  onClick={() => {
+                    setSelected(e);
+                    setShowComments(false);
+                  }}
+                >
+                  <img
+                    src={getFlowerSrc(e.placeholder)}
+                    alt={e.title}
+                    className="flower-icon"
+                  />
+                  <span className="tooltip">{e.title}</span>
+                </div>
+              ))
+            }
+            {contestants.length === 0 && <p>No entries yet.</p>}
+          </div>
+        )}
+ {/* Leaderboard grid */}
+ {tab === 'leaderboard' && (
+   <div className="poem-flower-grid">
+     {contestants.map((e) => (
+       <div
+         key={e.id}
+         className="flower-wrapper"
+         onClick={() => { setSelected(e); setShowComments(false); }}
+       >
+         <img
+           src={getFlowerSrc(e.placeholder)}
+           alt={e.title}
+           className="flower-icon"
+        />
+        <span className="tooltip">{e.title}</span>
+       </div>
+     ))}
+     {contestants.length === 0 && <p>No entries yet.</p>}
+   </div>
+ )}
+
+ {/* Previous Winner spotlight */}
+ {tab === 'previous' && randomPrev && (
+   <section className="poem-of-week">
+     <h2>🏅 Previous Winner</h2>
+     <div className="poem-card spotlight">
+       <img
+         src={getFlowerSrc(randomPrev.placeholder)}
+         alt={randomPrev.title}
+         className="spotlight-flower"   
+    />
+       <h3>{randomPrev.title}</h3>
+       <p className="full-content">{randomPrev.content}</p>
+       <div className="meta">
+         <span>{randomPrev.userEmail}</span>
+         <span>{randomPrev.votes} votes</span>
+       </div>
+       <button onClick={() => handleVote(randomPrev.id)}>
+         👍 Vote
+       </button>
+     </div>
+   </section>
+ )}
+        {/* Submit tab */}
+        {tab === 'submit' && (
+          <SubmitEntry user={user} onSubmit={handleSubmit}/>
+        )}
+      </div>
+
+      {/* Modal */}
+      {selected && (
+        <div className="modal-overlay" onClick={() => setSelected(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <img
+              src={getFlowerSrc(selected.placeholder)}
+              alt="Selected flower"
+              className="modal-flower"
+            />
+            <h2>{selected.title}</h2>
+            <p>{selected.content}</p>
+            <div className="actions">
+              <button onClick={() => handleVote(selected.id)}>
+                👍 Vote ({selected.votes})
+              </button>
+              <button onClick={() => setShowComments(s => !s)}>
+                💬 {showComments ? 'Hide' : 'Show'} Comments
+              </button>
+            </div>
+            {showComments && (
+              <div className="comments-dropdown">
+                <CommunityChat
+                  posts={[{
+                    author: selected.userEmail,
+                    time: new Date(selected.timestamp).toLocaleString(),
+                    title: selected.title,
+                    snippet: selected.content,
+                  }]}
+                />
               </div>
             )}
+            <button className="close-btn" onClick={() => setSelected(null)}>
+              Close
+            </button>
           </div>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
 
+// Inline submit form stays the same
 function SubmitEntry({ user, onSubmit }) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle]   = useState('');
   const [content, setContent] = useState('');
-  const [isOldPoem, setIsOldPoem] = useState(false);
-
-  const handleSubmit = () => {
-    if (!title.trim() || !content.trim()) {
-      alert('Please provide a title and content for your poem.');
-      return;
-    }
-    onSubmit({ title, content, isOldPoem });
-  };
+  const [isOld, setIsOld]   = useState(false);
 
   return (
-    <div style={{ padding: '16px' }}>
-      <input
-        type="text"
-        placeholder="Poem Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <textarea
-        placeholder="Write or paste your poem here"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <label>
-        <input
-          type="checkbox"
-          checked={isOldPoem}
-          onChange={(e) => setIsOldPoem(e.target.checked)}
-        />{' '}
-        This is an old poem
-      </label>
-      <div className="chat-input" style={{ marginTop: '12px' }}>
-        <input type="text" readOnly value={user ? user.email : ''} />
-        <button onClick={handleSubmit}>Post Poem</button>
-      </div>
+    <div className="submit-form">
+      {!user
+        ? <p>Please log in to submit.</p>
+        : <>
+            <input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+            />
+            <textarea
+              placeholder="Your poem..."
+              value={content}
+              onChange={e => setContent(e.target.value)}
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={isOld}
+                onChange={e => setIsOld(e.target.checked)}
+              /> Old poem
+            </label>
+            <button
+              onClick={() =>
+                onSubmit({ title, content, isOldPoem: isOld })
+              }
+            >
+              Post to Tournament
+            </button>
+          </>
+      }
     </div>
   );
 }
