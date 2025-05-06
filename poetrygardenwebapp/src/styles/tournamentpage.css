@@ -1,6 +1,10 @@
 .page-padding {
-  color:#4D6A5C;
+
+  background: url('../images/dirt.png') repeat;
   padding: 2rem;
+  min-height: calc(100vh - 70px); /* fill below your navbar */
+  box-sizing: border-box;
+  color: #4D6A5C;
 }
 
   .navbar {
@@ -49,97 +53,111 @@
   font-style: italic;
   color: #4A4A4A;
 }
-
-/* Poem Flower Grid */
 .poem-flower-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-auto-rows: 80px;
   gap: 16px;
   margin-top: 20px;
+  justify-items: center;
+  align-items: start;
+  padding: 1rem;
 }
-
 .flower-wrapper {
+  width: 80px;
+  height: 80px;
   position: relative;
-  display: inline-block;
   cursor: pointer;
-  width: 100px; /* Increased size */
-  height: 100px; /* Increased size */
 }
-
 .flower-icon {
   width: 100%;
   height: 100%;
   object-fit: contain;
   transition: transform 0.2s ease;
 }
-
 .flower-wrapper:hover .flower-icon {
-  transform: scale(1.2); /* Slightly larger on hover */
+  transform: scale(1.2);
 }
-
-/* Tooltip styling */
 .tooltip {
   visibility: hidden;
-  background-color: black;
+  background: #000;
   color: #fff;
   text-align: center;
-  padding: 5px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
   position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Position above flower */
+  bottom: 110%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 0.3s;
   white-space: nowrap;
 }
-
 .flower-wrapper:hover .tooltip {
   visibility: visible;
   opacity: 1;
 }
 
-/* Modal Styling */
+/* modal */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0,0,0,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 1000;
 }
-
 .modal-content {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 400px;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  max-width: 500px;
   width: 90%;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
-
 .modal-content h2 {
-  margin-bottom: 1rem;
+  margin-top: 0;
 }
-
+.modal-content .actions {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
 .modal-content button {
-  margin-top: 1.5rem;
   padding: 0.5rem 1rem;
-  background-color: #3a3a3a;
-  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
 }
-
-body {
-  margin: 0;
-  padding-top: 70px; /* Prevent content from overlapping the navbar */
+.modal-content .close-btn {
+  background: #ccc;
+  margin-top: 1rem;
+}
+/* winner spotlight flower */
+.spotlight-flower {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
 }
 
+/* modal’s flower */
+.modal-flower {
+  width: 80px;
+  height: 80px;
+  display: block;
+  margin: 0 auto 1rem;
+}
+.poem-of-week .poem-card.spotlight button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #9acd32;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.poem-of-week .poem-card.spotlight button:hover {
+  opacity: 0.9;
+}
