@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, fetchGardens } from "../firebase";
+import { auth, fetchGardens } from "../firebase.ts";
 import { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 

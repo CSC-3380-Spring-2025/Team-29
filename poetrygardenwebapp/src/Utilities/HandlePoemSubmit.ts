@@ -1,4 +1,4 @@
-import { addGarden } from "../firebase";
+import { addGarden } from "../firebase.ts";
 
 interface Poem {
   title: string;

@@ -1,6 +1,6 @@
 import React from "react";
-import PoemPage from "../components/PoemPage";
-import PoemLogic from "../components/PoemLogic"; // Import PoemLogic
+import PoemPage from "../components/PoemPage.tsx";
+import PoemLogic from "../components/PoemLogic.tsx"; // Import PoemLogic
 import "../styles/mygardenpage.css";
 
 const MyGardenPage = () => {

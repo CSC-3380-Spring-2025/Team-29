@@ -1,13 +1,13 @@
 //src/App.tsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import LoginSigninPage from "./pages/LoginSigninPage";
-import CommunityPage from "./pages/CommunityPage";
-import ProfilePage from "./pages/ProfilePage"; 
-import TournamentPage from "./pages/TournamentPage"; 
-import MyGardenPage from "./pages/MyGardenPage";
-import AboutPage from "./pages/AboutPage"; 
+import HomePage from "./pages/HomePage.tsx";
+import LoginSigninPage from "./pages/LoginSigninPage.tsx";
+import CommunityPage from "./pages/CommunityPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx"; 
+import TournamentPage from "./pages/TournamentPage.tsx"; 
+import MyGardenPage from "./pages/MyGardenPage.tsx";
+import AboutPage from "./pages/AboutPage.tsx"; 
 
 const App = () => {
   return (

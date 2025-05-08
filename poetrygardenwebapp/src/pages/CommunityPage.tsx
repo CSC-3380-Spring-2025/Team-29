@@ -1,5 +1,5 @@
 import React from "react";
-import PoemPage from "../components/PoemPage";
+import PoemPage from "../components/PoemPage.tsx";
 import '../styles/communitypage.css';
 
 

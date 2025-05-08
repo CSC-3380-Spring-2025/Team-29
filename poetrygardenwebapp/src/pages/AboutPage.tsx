@@ -1,9 +1,9 @@
 
 import Poetrygardenlogo from '../images/Poetrygardenlogo.png'; 
 import React, { useState, useEffect } from 'react';
-import { db, addGarden, fetchGardens } from '../firebase';
+import { db, addGarden, fetchGardens } from '../firebase.ts';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../firebase.ts';
 import '../styles/aboutpage.css';
 import { useNavigate } from "react-router-dom";
 import { User } from 'firebase/auth';

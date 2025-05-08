@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { db, addGarden, fetchGardens } from '../firebase';
+import { db, addGarden, fetchGardens } from '../firebase.ts';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../firebase.ts';
 import { User } from 'firebase/auth';
 
 const TournamentPage = () => {

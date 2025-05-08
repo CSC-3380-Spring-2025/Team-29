@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
-import PoemForm from "../components/PoemForm";
-import HandlePoemSubmit from "../Utilities/HandlePoemSubmit";
-import PoemLogic from "../components/PoemLogic";
-import getFlowerImage from "../Utilities/GetFlowerImage";
+import Header from "../components/Header.tsx";
+import PoemForm from "../components/PoemForm.tsx";
+import HandlePoemSubmit from "../Utilities/HandlePoemSubmit.ts";
+import PoemLogic from "../components/PoemLogic.tsx";
+import getFlowerImage from "../Utilities/GetFlowerImage.ts";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../firebase.ts";
 
 interface PoemPageProps {
   title: string;
