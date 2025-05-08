@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+# [Poetry Garden] : [Team 29]
+# Members
+Project Manager: [Jaylen Haney] ([Summrrino])\
+Communications Lead: [Thomas Lee] ([luffysolosyonko])\
+Git Master: [Rivers Dupaquier] ([RiversDupaquie])\
+Design Lead: [Tyler Jackson] ([tylerjackson177])\
+Quality Assurance Tester: [Julian Rodgers] ([jrodg32])
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# About Our Software
 
-## Available Scripts
+Poetry Garden is a web app that allows the user to explore a virtual garden filled with poems. The motivation behind it was to develop a better way for poets to share their work. Each plant/flower presents the user with a poem. Users can write and upload their own poem which will then be "planted" as an interactive element within their own garden. Users will be able to upload their poem to the "Community garden" that will be seen by others. Community Competition weekly tournaments will be held to decide which poems the users of the app like the best.
+## Platforms Tested on
+-Windows 11
 
-In the project directory, you can run:
+-MacOS
 
-### `npm start`
+-Linux
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+-Chrome
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+# Important Links
+Kanban Board: [https://lsu-team-proj.atlassian.net/jira/software/projects/DP/pages?atlOrigin=eyJpIjoiN2NlMGJlNDUxNWY0NDA2NjhiZTA1ZDcyYmNhNmMwY2EiLCJwIjoiaiJ9]\
+Designs: [https://www.figma.com/board/dOrHYopcyYqY8OBuvUCHFu/Untitled?node-id=0-1&t=dITOnRvu8sVpQ8yC-1]\
+Styles Guide(s): [https://www.w3schools.com/js/js_conventions.asp]
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# How to Run Dev and Test Environment
 
-### `npm run build`
+## Dependencies
+- firebase 11.6.1
+- framer-motion 12.9.7
+- lucide-react 0.507.0
+- react 19.0.0
+- react-dom 19.0.0
+- react-router-dom 7.5.1
+- react-scripts 5.0.1
+- web-vitals 2.1.4
+### Downloading Dependencies
+1. Install Node.js (v18 or later)
+	Node.js includes npm, which is used to manage packages.
+	https://nodejs.org/en
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Navigate to the project root in your terminal and run:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+npm install framer-motion
 
-### `npm run eject`
+npm install lucide-react
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+npm install react-router
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This will download all packages listed in package.json, including:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+React
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+React Router
 
-## Learn More
+Firebase
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Framer Motion
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Lucide React
 
-### Code Splitting
+TypeScript 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Commands
 
-### Analyzing the Bundle Size
+Follow these steps to launch the project from the main branch and test your code:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. Open a terminal and navigate to the root folder of the project:
 
-### Advanced Configuration
+cd poetry-garden
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+2. Install all project dependencies (only needs to be done once):
 
-### Deployment
+npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+npm install framer-motion
 
-### `npm run build` fails to minify
+npm install lucide-react
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+npm install react-router
+
+
+3. Add the Firebase configuration to firebase.ts under const firebaseConfig = {}. The API keys and config object were provided via team email (contact John Luke Denny if needed).
+   
+4. Start the server:
+
+npm start
+
+5. Open your browser and go to:
+   
+http://localhost:3000
+
