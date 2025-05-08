@@ -27,6 +27,6 @@ export async function fetchGardens() {
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-export async function addGarden(poem) {
+export async function addGarden(poem: { title: string; content: string; author?: string }) {
   await addDoc(collection(db, "gardens"), poem);
 }

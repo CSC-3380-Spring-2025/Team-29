@@ -10,6 +10,7 @@ import {
 import { collection, getDocs } from "firebase/firestore";
 import "../styles/loginpage.css";
 import { useNavigate } from "react-router-dom";
+import { User } from "firebase/auth";
 
 
 
@@ -18,7 +19,8 @@ const LoginSigninPage = () => {
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
+  
+  const [user, setUser] = useState<User | null>(null);
   const [usersList, setUsersList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -30,7 +32,7 @@ const LoginSigninPage = () => {
     });
   }, []);
 
-  const getFriendlyErrorMessage = (errorCode) => {
+  const getFriendlyErrorMessage = (errorCode: string) => {
   switch (errorCode) {
     case "auth/invalid-credential":
     case "auth/wrong-password":
@@ -55,8 +57,13 @@ const handleSignUp = async () => {
     setErrorMessage("");
     navigate("/profile");
   } catch (error) {
-    console.error("❌ Sign Up Error:", error.message);
-    setErrorMessage(getFriendlyErrorMessage(error.code));
+    if (error instanceof Error) {
+      console.error("❌ Sign Up Error:", error.message);
+      setErrorMessage(getFriendlyErrorMessage((error as any).code));
+    } else {
+      console.error("❌ Sign Up Error:", error);
+      setErrorMessage("An unknown error occurred.");
+    }
   }
 };
 
@@ -66,8 +73,13 @@ const handleLogin = async () => {
     setErrorMessage("");
     navigate("/communitypage"); // Navigate to the community page
   } catch (error) {
-    console.error("❌ Login Error:", error.message);
-    setErrorMessage(getFriendlyErrorMessage(error.code));
+    if (error instanceof Error) {
+      console.error("❌ Login Error:", error.message);
+      setErrorMessage(getFriendlyErrorMessage((error as any).code));
+    } else {
+      console.error("❌ Login Error:", error);
+      setErrorMessage("An unknown error occurred.");
+    }
   }
 };
 const navigate = useNavigate();
@@ -81,8 +93,13 @@ const handleForgotPassword = async () => {
     setSuccessMessage("Password reset email sent! Check your inbox.");
     setErrorMessage("");
   } catch (error) {
-    console.error("❌ Forgot Password Error:", error.message);
-    setErrorMessage(getFriendlyErrorMessage(error.code));
+    if (error instanceof Error) {
+      console.error("❌ Forgot Password Error:", error.message);
+      setErrorMessage(getFriendlyErrorMessage((error as any).code));
+    } else {
+      console.error("❌ Forgot Password Error:", error);
+      setErrorMessage("An unknown error occurred.");
+    }
   }
 };
 

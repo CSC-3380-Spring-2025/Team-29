@@ -1,6 +1,19 @@
 import React from "react";
 
-const PoemForm = ({
+interface Poem {
+  title: string;
+  content: string;
+  theme: string;
+}
+
+interface PoemFormProps {
+  newPoem: Poem;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  handlePoemSubmit: () => void;
+  getFlowerImage: (theme: string) => string;
+}
+
+const PoemForm: React.FC<PoemFormProps> = ({
   newPoem,
   handleInputChange,
   handlePoemSubmit,

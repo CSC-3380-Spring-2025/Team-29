@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import PoemForm from "../components/PoemForm";
 import HandlePoemSubmit from "../Utilities/HandlePoemSubmit";
@@ -7,7 +7,12 @@ import getFlowerImage from "../Utilities/GetFlowerImage";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
-const PoemPage = ({ title, filterPoems }) => {
+interface PoemPageProps {
+  title: string;
+  filterPoems: (poems: any[]) => any[];
+}
+
+const PoemPage: React.FC<PoemPageProps> = ({ title, filterPoems }) => {
   const {
     newPoem,
     setNewPoem,
@@ -17,15 +22,17 @@ const PoemPage = ({ title, filterPoems }) => {
     setGarden,
     user,
     setUser,
-    selectedPoem,
-    setSelectedPoem,
+    selectedPoem: selectedPoemState,
+    setSelectedPoem: setSelectedPoemState,
     showForm,
     setShowForm,
     navigate,
   } = PoemLogic();
 
+  const [selectedPoem, setSelectedPoem] = useState<{ id: string; title: string; content: string; theme: string; placeholder: string } | null>(null);
+
   // Handle input changes for the poem form
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setNewPoem((prev) => ({ ...prev, [name]: value }));
   };
@@ -35,7 +42,7 @@ const PoemPage = ({ title, filterPoems }) => {
     try {
       await HandlePoemSubmit({
         newPoem,
-        user,
+        user: user ? { email: user.email || undefined } : null, // Convert null to undefined
         setPoems,
         setGarden,
         setShowForm,
@@ -47,7 +54,7 @@ const PoemPage = ({ title, filterPoems }) => {
   };
 
   // Handle flower click to open modal
-  const handleFlowerClick = (poem) => {
+  const handleFlowerClick = (poem: { id: string; title: string; content: string; theme: string; placeholder: string }) => {
     setSelectedPoem(poem);
   };
 
@@ -69,7 +76,7 @@ const PoemPage = ({ title, filterPoems }) => {
 
   return (
     <div className="poem-page">
-      <Header user={user} handleLogout={handleLogout} />
+      <Header user={user && user.email ? { email: user.email } : null} handleLogout={handleLogout} />
 
       <div className="page-padding">
         <h1>{title}</h1>

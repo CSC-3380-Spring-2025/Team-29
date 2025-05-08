@@ -6,9 +6,11 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import '../styles/aboutpage.css';
 import { useNavigate } from "react-router-dom";
+import { User } from 'firebase/auth';
 
 const AboutPage = () => {
-    const [user, setUser] = useState(null);
+    
+    const [user, setUser] = useState<User | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {

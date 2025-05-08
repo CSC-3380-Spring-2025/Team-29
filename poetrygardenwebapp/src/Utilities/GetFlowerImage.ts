@@ -11,7 +11,7 @@ import Flower10 from '../images/Flower10.png';
 import Flower11 from '../images/Flower11.png';
 import Flower12 from '../images/Flower12.png';
 
-const getFlowerImage = (placeholder) => {
+const getFlowerImage = (placeholder: string) => {
     if (placeholder === "Flower1.png") return Flower1; //
     if (placeholder === "Flower2.png") return Flower2;
     if (placeholder === "Flower3.png") return Flower3;

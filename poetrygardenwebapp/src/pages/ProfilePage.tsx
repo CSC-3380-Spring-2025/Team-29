@@ -10,11 +10,11 @@ const ProfileCard = () => {
   const [interests, setInterests] = useState("etc. Coding, Gaming");
   const [language, setLanguage] = useState("English");
   const [nickname, setNickname] = useState("Choose a funky nickname");
-  const [pfp, setPfp] = useState(null);
+  const [pfp, setPfp] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
     if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
       setPfp(URL.createObjectURL(file));
     }

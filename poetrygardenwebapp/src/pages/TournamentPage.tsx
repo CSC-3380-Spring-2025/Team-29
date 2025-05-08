@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { db, addGarden, fetchGardens } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
+import { User } from 'firebase/auth';
 
 const TournamentPage = () => {
-    const [user, setUser] = useState(null);
+    
+    const [user, setUser] = useState<User | null>(null);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           setUser(user);

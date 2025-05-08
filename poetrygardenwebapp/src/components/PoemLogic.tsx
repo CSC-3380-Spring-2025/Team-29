@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, fetchGardens } from "../firebase";
+import { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
 
 const PoemLogic = () => {
   const [newPoem, setNewPoem] = useState({ title: "", content: "", theme: "" });
-  const [poems, setPoems] = useState([]);
-  const [garden, setGarden] = useState([]);
-  const [user, setUser] = useState(null);
+  const [poems, setPoems] = useState<{ id: string }[]>([]);
+  const [garden, setGarden] = useState<{ id: string }[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [selectedPoem, setSelectedPoem] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();

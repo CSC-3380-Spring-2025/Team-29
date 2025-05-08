@@ -1,5 +1,11 @@
 import { addGarden } from "../firebase";
 
+interface Poem {
+  title: string;
+  content: string;
+  theme: string;
+}
+
 const handlePoemSubmit = async ({
   newPoem,
   user,
@@ -7,6 +13,13 @@ const handlePoemSubmit = async ({
   setGarden,
   setShowForm,
   setNewPoem,
+}: {
+  newPoem: Poem;
+  user: { email?: string } | null;
+  setPoems: React.Dispatch<React.SetStateAction<any[]>>;
+  setGarden: React.Dispatch<React.SetStateAction<any[]>>;
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewPoem: React.Dispatch<React.SetStateAction<Poem>>;
 }) => {
   const placeholder =
     newPoem.theme === "love"

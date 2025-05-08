@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Poetrygardenlogo from "../images/Poetrygardenlogo.png";
 
-const Header = ({ user, handleLogout }) => {
+interface HeaderProps {
+  user: { email: string } | null;
+  handleLogout: () => Promise<void>;
+}
+
+const Header: React.FC<HeaderProps> = ({ user, handleLogout }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
