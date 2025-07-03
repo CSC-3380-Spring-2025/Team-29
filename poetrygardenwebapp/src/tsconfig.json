@@ -3,6 +3,8 @@
     "target": "ESNext",
     "module": "ESNext",
     "jsx": "react",
+    "lib": ["dom", "esnext"],
+    "types": ["react", "react-dom"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
