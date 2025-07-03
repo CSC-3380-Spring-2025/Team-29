@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage.tsx";
 import TournamentPage from "./pages/TournamentPage.tsx"; 
 import MyGardenPage from "./pages/MyGardenPage.tsx";
 import AboutPage from "./pages/AboutPage.tsx"; 
+import GardenTalk from "./pages/GardenTalk.tsx"; 
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/tournament" element={<TournamentPage />} /> 
         <Route path="/mygarden" element={<MyGardenPage />} /> 
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/gardentalk" element={<GardenTalk />} />
       </Routes>
     </Router>
   );
