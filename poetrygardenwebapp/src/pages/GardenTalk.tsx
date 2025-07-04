@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { collection, doc, getDocs, updateDoc, addDoc, onSnapshot, arrayUnion, arrayRemove, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase';  
+import { db } from '../firebase.ts';  
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { FaHeart } from 'react-icons/fa';
